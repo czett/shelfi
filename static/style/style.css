@@ -118,17 +118,19 @@ div, p, a{
 
 .dashboard .row{
     width: 100%;
-    aspect-ratio: 4;
+    aspect-ratio: 3.5;
+    display: flex;
+    gap: var(--ypad);
     /* background-color: var(--orange); */
 }
 
 .dashboard .row .child{
     padding: var(--ypad);
     border-radius: var(--radius-big);
+    background-color: var(--light-bg);
 }
 
 .dashboard .row .child.quick-actions{
-    background-color: var(--light-bg);
     height: 100%;
     aspect-ratio: 1;
     display: grid;
@@ -193,4 +195,66 @@ div, p, a{
 
 .quick-action:nth-of-type(4) .quick-action-icon span{
     color: var(--red);
+}
+
+.row .child.overview{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1ch;
+}
+
+.overview .message{
+    width: 100%;
+    border-radius: var(--radius);
+    background-color: var(--blue-light);
+    padding: 1ch;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1ch;
+}
+
+.overview .message .message-icon{
+    border-radius: 50%;
+    background-color: var(--blue);
+    aspect-ratio: 1;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overview .message .message-icon span{
+    color: var(--blue-light);
+    font-size: 1.5rem;
+}
+
+.overview .message .message-text{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.overview .message.warning{
+    background-color: var(--orange-light);
+}
+
+.overview .message.alert{
+    background-color: var(--red-light);
+}
+
+.overview .message.warning .message-icon{
+    background-color: var(--orange);
+}
+
+.overview .message.alert .message-icon{
+    background-color: var(--red);
+}
+
+.overview .message.warning .message-icon span{
+    color: var(--orange-light);
+}
+
+.overview .message.alert .message-icon span{
+    color: var(--red-light);
 }
