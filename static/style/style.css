@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+:root {
+    --bg-color: #ffffff;
+    --fg-color: #000000;
+    --light-text: #999999;
+    --light-border: #e2e2e2;
+    --light-bg: #f0f0f0;
+    --lines: #cccccc;
+
+    /* Light-Töne etwas kräftiger, aber immer noch sanft */
+    --red: #c62828;
+    --red-light: #ffcdd2; /* Etwas satter als die vorherige Version */
+
+    --orange: #e65100;
+    --orange-light: #ffecb3; /* Satter, aber hell */
+
+    --yellow: #f9a825;
+    --yellow-light: #fff9c4; /* Sichtbarer Gelbton */
+
+    --green: #2e7d32;
+    --green-light: #c8e6c9; /* Sanftes Pastellgrün */
+
+    --blue: #1565c0;
+    --blue-light: #bbdefb; /* Erkennbares Hellblau */
+
+    --indigo: #3949ab;
+    --indigo-light: #c5cae9; /* Dezentes Hellindigo */
+
+    --violet: #8e24aa;
+    --violet-light: #e1bee7; /* Zartes Lila */
+    
+    /* spacing etc */
+    --xpad: 4.5rem;
+    --ypad: 1.5rem;
+    --radius: .75rem;
+    --radius-big: 1.5rem;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Manrope';
+    transition: 300ms;
+}
+
+body, html{
+    margin: 0;
+}
+
+div, p, a{
+    font-weight: 600;
+}
+
+/* navbar */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 10dvh;
+    padding: 0 var(--xpad);
+    background-color: var(--bg-color);
+}
+
+.navbar a {
+    color: var(--fg-color);
+    text-decoration: none;
+}
+
+.navbar a.logo-text{
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.navbar-right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .5rem;
+}
+
+.navbar-right a {
+    text-align: center;
+    background-color: var(--fg-color);
+    color: var(--bg-color);
+    padding: .75ch 1.5ch;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    border: 2px solid var(--fg-color);
+}
+
+.navbar-right a:hover {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    border-color: var(--fg-color);
+}
+
+/* content index */
+
+.content{
+    padding: 0 var(--xpad);
+    margin-top: 10dvh;
+    max-width: 100%;
+    overflow-x: hidden;
+    /* background-color: var(--indigo); */
+}
+
+.dashboard{
+    width: 100%;
+    /* background-color: var(--yellow); */
+}
+
+.dashboard .row{
+    width: 100%;
+    aspect-ratio: 4;
+    /* background-color: var(--orange); */
+}
+
+.dashboard .row .child{
+    padding: var(--ypad);
+    border-radius: var(--radius-big);
+}
+
+.dashboard .row .child.quick-actions{
+    background-color: var(--light-bg);
+    height: 100%;
+    aspect-ratio: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1ch;
+}
+
+.child.quick-actions .quick-action{
+    background-color: var(--bg-color);
+    border-radius: var(--radius);
+    padding: 1ch;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.quick-action:hover{
+    scale: 1.02;
+}
+
+.quick-action .quick-action-icon{
+    border-radius: 50%;
+    width: 3rem;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-action .quick-action-icon span{
+    color: var(--blue);
+}
+
+.quick-action:nth-of-type(1) .quick-action-icon {
+    background-color: var(--yellow-light);
+}
+
+.quick-action:nth-of-type(2) .quick-action-icon {
+    background-color: var(--blue-light);
+}
+
+.quick-action:nth-of-type(3) .quick-action-icon {
+    background-color: var(--green-light);
+}
+
+.quick-action:nth-of-type(4) .quick-action-icon {
+    background-color: var(--red-light);
+}
+
+.quick-action:nth-of-type(1) .quick-action-icon span{
+    color: var(--yellow);
+}
+
+.quick-action:nth-of-type(2) .quick-action-icon span{
+    color: var(--blue);
+}
+
+.quick-action:nth-of-type(3) .quick-action-icon span{
+    color: var(--green);
+}
+
+.quick-action:nth-of-type(4) .quick-action-icon span{
+    color: var(--red);
+}
