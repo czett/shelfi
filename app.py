@@ -10,16 +10,23 @@ except Exception as e:
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
+def check_logged_in():
+    return session.get('logged_in', False)
+
 @app.route('/')
 def index():
     return render_template('index.html', session=session)
 
 @app.route('/login')
 def login():
+    if check_logged_in():
+        return redirect('/')
     return render_template('auth.html', action='login', session=session)
 
 @app.route('/register')
 def register():
+    if check_logged_in():
+        return redirect('/')
     return render_template('auth.html', action='register', session=session)
 
 @app.route('/login/submit', methods=['POST'])
@@ -30,7 +37,7 @@ def login_submit():
     if success:
         session['username'] = username
         session['logged_in'] = True
-        return redirect('/')
+        return redirect('/dashboard')
     else:
         return render_template('auth.html', action='login', error=message, session=session)
     
@@ -43,7 +50,7 @@ def register_submit():
     if success:
         session['username'] = username
         session['logged_in'] = True
-        return redirect('/')
+        return redirect('/dashboard')
     else:
         return render_template('auth.html', action='register', error=message, session=session)
 
@@ -51,6 +58,12 @@ def register_submit():
 def logout():
     session.clear()
     return redirect('/')
+
+@app.route('/dashboard')
+def dashboard():
+    if not check_logged_in():
+        return redirect('/login')
+    return render_template('dashboard.html', session=session)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
