@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, session, request
-import database, dotenv, os
+import database, dotenv, os, re
 
 try:
     dotenv.load_dotenv()
@@ -34,6 +34,11 @@ def login_submit():
     username = request.form['username']
     password = request.form['password']
     success, message = database.login(username, password)
+    
+    # Sanitize username: allow only alphanumeric and underscores, reject others
+    if not re.match(r'^\w+$', username):
+        return render_template('auth.html', action='login', error='Invalid username: only letters, numbers, and underscores are allowed.', session=session)
+    
     if success:
         session['username'] = username
         session['logged_in'] = True

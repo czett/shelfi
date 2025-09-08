@@ -56,6 +56,10 @@ div, p, a{
     color: var(--bg-color);
 }
 
+::-webkit-scrollbar{
+    display: none;
+}
+
 /* navbar */
 
 .navbar {
@@ -87,6 +91,14 @@ div, p, a{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: .5rem;
+}
+
+.navbar-right .welcome-text{
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    /* color: var(--light-text); */
 }
 
 .navbar-right a {
@@ -133,6 +145,7 @@ div, p, a{
     padding: var(--ypad);
     border-radius: var(--radius-big);
     background-color: var(--light-bg);
+    position: relative;
 }
 
 .dashboard .row .child.quick-actions{
@@ -343,6 +356,80 @@ div, p, a{
 
 .space-card .space-icon-and-name div{
     font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* create space floating button */
+
+.child.spaces .create-space-button{
+    position: absolute;
+    inset: var(--ypad) var(--ypad) auto auto;
+    background-color: var(--fg-color);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    color: var(--bg-color);
+    padding: .75rem 1rem;
+    gap: .5rem;
+    cursor: pointer;
+}
+
+.child.spaces .create-space-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+}
+
+.child.spaces .create-space-icon span{
+    font-size: 2rem;
+    color: inherit;
+}
+
+/* create new space form */
+
+.create-space-form{
+    position: absolute;
+    inset: auto 50% 0% auto;
+    background-color: var(--light-border);
+    min-width: 50%;
+    width: fit-content;
+    overflow: hidden;
+    max-width: 100%;
+    transform: translate(50%, 100%);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 1rem;
+}
+
+.create-space-form form{
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.create-space-form form input{
+    flex: 3;
+    padding: 1ch 1.5ch;
+    font-size: 1rem;
+    border: 2px solid var(--lines);
+    background-color: var(--light-bg);
+    border-radius: calc(0.75*var(--radius));
+    outline: none;
+    font-weight: 700;
+}
+
+.create-space-form form button{
+    flex: 1;
+    padding: 1ch 1.5ch;
+    font-size: 1rem;
+    color: var(--bg-color);
+    border: none;
+    background-color: var(--fg-color);
+    border-radius: calc(0.75*var(--radius));
+    outline: none;
     font-weight: 700;
 }
 

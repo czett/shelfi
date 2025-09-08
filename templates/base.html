@@ -22,6 +22,12 @@
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
             </div>
+        {% else %}
+            <div class="navbar-right">
+                <div></div>
+                <div class="welcome-text">Welcome back, {{session.username}}!</div>
+                <!-- <a href="/logout">Logout</a> -->
+            </div>
         {% endif %}
     </div>
     {% endblock %}

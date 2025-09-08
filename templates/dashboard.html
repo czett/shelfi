@@ -54,6 +54,13 @@
                 Overview of your kitchen spaces
             </div>
 
+            <div class="create-space-button" onmousedown="expandCreateSpaceForm()">
+                <div class="create-space-icon">
+                    <span class="material-symbols-rounded">add</span>
+                </div>
+                <div class="create-space-text">Create New Space</div>
+            </div>
+
             <div class="spaces-list">
                 <div class="space-card">
                     <div class="space-icon-and-name">
@@ -64,9 +71,50 @@
                     </div>
                     <div class="space-card-count">3 members, 24 items</div>
                 </div>
+                <div class="space-card">
+                    <div class="space-icon-and-name">
+                        <div class="space-card-icon">
+                            <span class="material-symbols-rounded">fork_spoon</span>
+                        </div>
+                        <div class="space-card-name">Wohnheim Etage 2</div>
+                    </div>
+                    <div class="space-card-count">6 members, 13 items</div>
+                </div>
+                <div class="space-card">
+                    <div class="space-icon-and-name">
+                        <div class="space-card-icon">
+                            <span class="material-symbols-rounded">fork_spoon</span>
+                        </div>
+                        <div class="space-card-name">Zuhause</div>
+                    </div>
+                    <div class="space-card-count">2 members, 7 items</div>
+                </div>
+            </div>
+
+            <div class="create-space-form" data-expanded="false">
+                <form action="/api/create-space">
+                    <input type="text" id="space_name" name="space_name" required placeholder="Space Name">
+                    <button type="submit">Submit</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function expandCreateSpaceForm() {
+        // const button = document.querySelector('.create-space-button');
+        const form = document.querySelector('.create-space-form');
+
+        
+        if (form.getAttribute('data-expanded') === 'false') {
+            form.style.transform = "translate(50%, 0%)";
+            form.setAttribute('data-expanded', 'true');
+        } else {
+            form.style.transform = "translate(50%, 100%)";
+            form.setAttribute('data-expanded', 'false');
+        }
+    }
+</script>
 
 {% endblock %}
