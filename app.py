@@ -37,14 +37,19 @@ def login_submit():
     
     # Sanitize username: allow only alphanumeric and underscores, reject others
     if not re.match(r'^\w+$', username):
-        return render_template('auth.html', action='login', error='Invalid username: only letters, numbers, and underscores are allowed.', session=session)
+        return render_template('auth.html', action='login', message='Invalid username: only letters, numbers, and underscores are allowed.', session=session)
     
     if success:
         session['username'] = username
         session['logged_in'] = True
+
+        # get user id as well
+        user_id = database.get_user_id(username)
+        session['user_id'] = user_id
+
         return redirect('/dashboard')
     else:
-        return render_template('auth.html', action='login', error=message, session=session)
+        return render_template('auth.html', action='login', message=message, session=session)
     
 @app.route('/register/submit', methods=['POST'])
 def register_submit():
@@ -55,9 +60,14 @@ def register_submit():
     if success:
         session['username'] = username
         session['logged_in'] = True
+
+        # get user id as well
+        user_id = database.get_user_id(username)
+        session['user_id'] = user_id
+
         return redirect('/dashboard')
     else:
-        return render_template('auth.html', action='register', error=message, session=session)
+        return render_template('auth.html', action='register', message=message, session=session)
 
 @app.route('/logout')
 def logout():
@@ -68,7 +78,29 @@ def logout():
 def dashboard():
     if not check_logged_in():
         return redirect('/login')
-    return render_template('dashboard.html', session=session)
+    
+    # fetch spaces of logged in user
+    user_id = session.get('user_id')
+    spaces = database.get_user_spaces(user_id)
+    
+    return render_template('dashboard.html', session=session, spaces=spaces)
+
+@app.route('/api/create-space', methods=['GET', 'POST'])
+def create_space():
+    if not check_logged_in():
+        return redirect('/login')
+    
+    user_id = session.get('user_id')
+    space_name = request.values.get('space_name')
+    
+    if not space_name or len(space_name) > 100:
+        return "Invalid space name.", 400
+    
+    success, message = database.create_space(user_id, space_name)
+    if success:
+        return redirect('/dashboard')
+    else:
+        return message, 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

@@ -17,11 +17,11 @@
                 </div>
                 <div class="quick-action-name">New Item</div>
             </div>
-            <div class="quick-action">
+            <div class="quick-action" onmousedown="expandCreateSpaceForm()">
                 <div class="quick-action-icon">
-                    <span class="material-symbols-rounded">restaurant</span>
+                    <span class="material-symbols-rounded">soup_kitchen</span>
                 </div>
-                <div class="quick-action-name">Recipes</div>
+                <div class="quick-action-name">New Space</div>
             </div>
             <div class="quick-action">
                 <div class="quick-action-icon">
@@ -62,33 +62,17 @@
             </div>
 
             <div class="spaces-list">
+                {% for space in spaces %}
                 <div class="space-card">
                     <div class="space-icon-and-name">
                         <div class="space-card-icon">
                             <span class="material-symbols-rounded">fork_spoon</span>
                         </div>
-                        <div class="space-card-name">Kitchen</div>
+                        <div class="space-card-name">{{space.name}}</div>
                     </div>
-                    <div class="space-card-count">3 members, 24 items</div>
+                    <div class="space-card-count">{{space.members}} member(s)</div>
                 </div>
-                <div class="space-card">
-                    <div class="space-icon-and-name">
-                        <div class="space-card-icon">
-                            <span class="material-symbols-rounded">fork_spoon</span>
-                        </div>
-                        <div class="space-card-name">Wohnheim Etage 2</div>
-                    </div>
-                    <div class="space-card-count">6 members, 13 items</div>
-                </div>
-                <div class="space-card">
-                    <div class="space-icon-and-name">
-                        <div class="space-card-icon">
-                            <span class="material-symbols-rounded">fork_spoon</span>
-                        </div>
-                        <div class="space-card-name">Zuhause</div>
-                    </div>
-                    <div class="space-card-count">2 members, 7 items</div>
-                </div>
+                {% endfor %}
             </div>
 
             <div class="create-space-form" data-expanded="false">
