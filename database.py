@@ -1,6 +1,7 @@
 import psycopg
 import dotenv, os
 import bcrypt
+from datetime import datetime
 
 try:
     dotenv.load_dotenv()
@@ -109,11 +110,86 @@ def create_space(user_id, space_name):
             cur.execute("INSERT INTO spaces (space_name) VALUES (%s) RETURNING space_id", (space_name,))
             space_id = cur.fetchone()[0]
             # Associate space with user
-            cur.execute("INSERT INTO user_spaces (user_id, space_id) VALUES (%s, %s)", (user_id, space_id))
+            cur.execute("INSERT INTO user_spaces (user_id, space_id, role) VALUES (%s, %s, %s)", (user_id, space_id, "admin"))
             conn.commit()
             return True, "Space created successfully."
     except Exception as e:
         print("Error creating space:", e)
         return False, "An error occurred while creating the space."
+    finally:
+        conn.close()
+        
+def get_space_details(space_id):
+
+    conn = get_db_connection()
+    if conn is None:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT 
+                    s.space_id, 
+                    s.space_name, 
+                    COUNT(us.user_id) as member_count,
+                    u.username as creator_username,
+                    s.created_at
+                FROM spaces s
+                LEFT JOIN user_spaces us ON s.space_id = us.space_id
+                LEFT JOIN user_spaces admin_us ON s.space_id = admin_us.space_id AND admin_us.role = 'admin'
+                LEFT JOIN users u ON admin_us.user_id = u.user_id
+                WHERE s.space_id = %s
+                GROUP BY s.space_id, s.space_name, u.username, s.created_at
+            """, (space_id,))
+            result = cur.fetchone()
+            if result:
+                created_at_date = result[4]
+                if isinstance(created_at_date, datetime):
+                    created_at_date = created_at_date.strftime("%b %d, %Y")
+                else:
+                    created_at_date = str(created_at_date)
+                return {
+                    'id': result[0],
+                    'name': result[1],
+                    'members': result[2],
+                    'creator': result[3],
+                    'created_at': created_at_date
+                }
+            return None
+    except Exception as e:
+        print("Error fetching space details:", e)
+        return None
+    finally:
+        conn.close()
+        
+def get_space_items(space_id):
+    conn = get_db_connection()
+    if conn is None:
+        return []
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT item_id, product_name, quantity, unit, barcode, image_url, expiration_date, added_by_user_id, added_at
+                FROM items
+                WHERE space_id = %s
+                ORDER BY added_at DESC
+            """, (space_id,))
+            items = cur.fetchall()
+            return [
+                {
+                    'id': row[0],
+                    'name': row[1],
+                    'quantity': row[2],
+                    'unit': row[3],
+                    'barcode': row[4],
+                    'image_url': row[5],
+                    'expiration_date': row[6],
+                    'added_by_user': row[7],
+                    'added_at': row[8]
+                }
+                for row in items
+            ]
+    except Exception as e:
+        print("Error fetching space items:", e)
+        return []
     finally:
         conn.close()

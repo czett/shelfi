@@ -15,6 +15,8 @@ def check_logged_in():
 
 @app.route('/')
 def index():
+    if check_logged_in():
+        return redirect('/dashboard')
     return render_template('index.html', session=session)
 
 @app.route('/login')
@@ -101,6 +103,16 @@ def create_space():
         return redirect('/dashboard')
     else:
         return message, 500
+    
+@app.route("/space/<int:space_id>")
+def view_space(space_id):
+    if not check_logged_in():
+        return redirect('/login')
+    
+    space = database.get_space_details(space_id)
+    items = database.get_space_items(space_id)
+    
+    return render_template('space.html', session=session, space=space, items=items)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

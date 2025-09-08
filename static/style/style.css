@@ -138,6 +138,7 @@ div, p, a{
     aspect-ratio: 4.5;
     display: flex;
     gap: var(--ypad);
+    overflow: hidden;
     /* background-color: var(--orange); */
 }
 
@@ -306,13 +307,13 @@ div, p, a{
     font-size: 1rem;
     font-weight: 500;
     color: var(--fg-color);
+    margin-bottom: 1rem;
 }
 
 /* spaces list, similar to messages */
 
 .child.spaces .spaces-list{
     flex: 1;
-    margin-top: 1rem;
     /* overflow-y: auto; */
     display: flex;
     flex-direction: column;
@@ -326,6 +327,8 @@ div, p, a{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
+    color: var(--fg-color);
     cursor: pointer;
 }
 
@@ -545,4 +548,56 @@ div, p, a{
     border: none;
     border-radius: var(--radius);
     cursor: pointer;
+}
+
+/* space subpage */
+
+.child.space-overview{
+    min-width: 15%;
+    max-width: 25%;
+}
+
+.child.space-overview .space-name{
+    font-size: 2rem;
+}
+
+.space-tags{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 1ch;
+    margin-bottom: 1rem;
+}
+
+.space-tag{
+    display: flex;
+    gap: 1ch;
+    align-items: center;
+    justify-content: start;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1ch;
+    background-color: var(--fg-color);
+    color: var(--bg-color);
+    border-radius: var(--radius);
+    width: fit-content;
+}
+
+.space-overview a.btn{
+    text-decoration: none;
+    color: var(--bg-color);
+    background-color: var(--red);
+    width: calc(100% - 2* var(--ypad));
+    display: block;
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 1ch 0;
+    border-radius: var(--radius);
+    position: absolute;
+    inset: auto 50% var(--ypad) auto;
+    transform: translate(50%, 0);
+}
+
+.space-overview a.btn:hover{
+    filter: brightness(1.1);
 }

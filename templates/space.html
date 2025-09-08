@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+    <div class="row">
+        <div class="child space-overview">
+            <div class="space-name dashboard-child-title">
+                {{ space.name }}
+            </div>
+            <div class="dashboard-child-subtitle">
+                This is your "{{space.name}}" space. Here you can manage food items, organize shopping lists, and keep track of your pantry.
+            </div>
+            <div class="space-tags">
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">group</span>
+                    {{ space.members }} member(s)
+                </div>
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">verified_user</span>
+                    Created by @{{ space.creator }}
+                </div>
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">calendar_clock</span>
+                    Created on {{ space.created_at }}
+                </div>
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">bakery_dining</span>
+                    {{ items | length }} item(s)
+                </div>
+            </div>
+            
+            {% if session.username == space.creator %}
+                <a href="/" class="btn btn-danger">
+                    Delete Space
+                </a>
+            {% else %}
+                <a href="/" class="btn btn-warning">
+                    Leave Space
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

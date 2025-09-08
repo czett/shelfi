@@ -63,7 +63,7 @@
 
             <div class="spaces-list">
                 {% for space in spaces %}
-                <div class="space-card">
+                <a class="space-card" href="/space/{{space.id}}">
                     <div class="space-icon-and-name">
                         <div class="space-card-icon">
                             <span class="material-symbols-rounded">fork_spoon</span>
@@ -71,7 +71,7 @@
                         <div class="space-card-name">{{space.name}}</div>
                     </div>
                     <div class="space-card-count">{{space.members}} member(s)</div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
 
