@@ -5,7 +5,7 @@
     --fg-color: #000000;
     --light-text: #999999;
     --light-border: #e2e2e2;
-    --light-bg: #f0f0f0;
+    --light-bg: #f8f8f8;
     --lines: #cccccc;
 
     /* Light-Töne etwas kräftiger, aber immer noch sanft */
@@ -51,6 +51,11 @@ div, p, a{
     font-weight: 600;
 }
 
+::selection{
+    background: var(--fg-color);
+    color: var(--bg-color);
+}
+
 /* navbar */
 
 .navbar {
@@ -74,7 +79,7 @@ div, p, a{
 }
 
 .navbar a.logo-text{
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 800;
 }
 
@@ -118,7 +123,7 @@ div, p, a{
 
 .dashboard .row{
     width: 100%;
-    aspect-ratio: 3.5;
+    aspect-ratio: 4.5;
     display: flex;
     gap: var(--ypad);
     /* background-color: var(--orange); */
@@ -141,7 +146,7 @@ div, p, a{
 .child.quick-actions .quick-action{
     background-color: var(--bg-color);
     border-radius: var(--radius);
-    padding: 1ch;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -154,15 +159,21 @@ div, p, a{
 
 .quick-action .quick-action-icon{
     border-radius: 50%;
-    width: 3rem;
+    width: 35%;
     aspect-ratio: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.quick-action .quick-action-name{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
 .quick-action .quick-action-icon span{
     color: var(--blue);
+    font-size: 2.25rem;
 }
 
 .quick-action:nth-of-type(1) .quick-action-icon {
@@ -208,11 +219,11 @@ div, p, a{
     width: 100%;
     border-radius: var(--radius);
     background-color: var(--blue-light);
-    padding: 1ch;
+    padding: 1rem;
     display: flex;
     justify-content: start;
     align-items: center;
-    gap: 1ch;
+    gap: 1rem;
 }
 
 .overview .message .message-icon{
@@ -231,7 +242,7 @@ div, p, a{
 }
 
 .overview .message .message-text{
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
@@ -257,4 +268,103 @@ div, p, a{
 
 .overview .message.alert .message-icon span{
     color: var(--red-light);
+}
+
+/* auth ui :3 */
+
+.auth-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    background-color: var(--light-bg);
+    
+    position: fixed;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    padding: .75rem;
+    border-radius: var(--radius-big);
+    min-width: 15%;
+}
+
+.auth-container h2{
+    line-height: 100%;
+    margin: 0ch 0;
+    font-size: 1.75rem;
+}
+
+.auth-container p{
+    margin-top: .5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--light-text);
+}
+
+.auth-container .switch-action{
+    margin-top: 0rem;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0;
+    color: var(--fg-color);
+}
+
+.auth-container .switch-action a{
+    color: var(--fg-color);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-container form{
+    width: 100%;
+    margin: 1rem 0;
+    margin-top: 0;
+    padding: 2rem;
+    background-color: var(--bg-color);
+    border: 1px solid var(--light-border);
+    border-radius: var(--radius);
+}
+
+.auth-container .form-group{
+    display: flex;
+    flex-direction: column;
+    gap: .25ch;
+    margin-bottom: 1rem;
+}
+
+.auth-container .form-group label{
+    font-size: 1rem;
+    font-weight: 600;
+    display: none;
+}
+
+.auth-container .form-group input{
+    padding: 1ch 1.5ch;
+    font-size: 1rem;
+    border: 2px solid var(--light-border);
+    background-color: var(--light-bg);
+    border-radius: calc(0.75*var(--radius));
+    outline: none;
+    font-weight: 700;
+}
+
+.auth-container .form-group input::placeholder {
+    font-weight: 500;
+}
+
+.auth-container .form-group input:focus{
+    border-color: var(--lines);
+}
+
+.auth-container button{
+    width: 100%;
+    padding: 1ch 1.5ch;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--bg-color);
+    background-color: var(--fg-color);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
 }

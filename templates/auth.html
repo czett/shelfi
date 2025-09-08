@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <form method="post" action="/{{ action }}">
+        <h2>{{ action|capitalize }}</h2>
+        {% if action == 'login' %}
+            <p class="subtitle">Continue where you left off</p>
+        {% elif action == 'register' %}
+            <p class="subtitle">Create your new account now</p>
+        {% endif %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required placeholder="Username">
+        </div>
+        {% if action == 'register' %}
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required placeholder="Email">
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required placeholder="Password">
+        </div>
+        {% if action == 'register' %}
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required placeholder="Repeat password">
+        </div>
+        {% endif %}
+        <button type="submit">{{ action|capitalize }}</button>
+    </form>
+    <div class="switch-action">
+        {% if action == 'login' %}
+            <p>Don't have an account? <a href="/register">Register</a></p>
+        {% else %}
+            <p>Already have an account? <a href="/login">Login</a></p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    if (confirmPassword) {
+        function validatePasswords() {
+            if (password.value !== confirmPassword.value) {
+                password.style.borderColor = '#ff0000';
+                confirmPassword.style.borderColor = '#ff0000';
+                submitBtn.disabled = true;
+            } else {
+                password.style.borderColor = '';
+                confirmPassword.style.borderColor = '';
+                submitBtn.disabled = false;
+            }
+        }
+
+        password.addEventListener('input', validatePasswords);
+        confirmPassword.addEventListener('input', validatePasswords);
+    }
+});
+</script>
+{% endblock %}
