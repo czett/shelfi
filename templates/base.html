@@ -17,10 +17,12 @@
     <div class="navbar">
         <a href="/" class="logo-text">shelfi</a>
 
-        <div class="navbar-right">
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-        </div>
+        {% if not session.logged_in %}
+            <div class="navbar-right">
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            </div>
+        {% endif %}
     </div>
     {% endblock %}
 </body>

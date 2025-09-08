@@ -2,13 +2,21 @@
 
 {% block content %}
 <div class="auth-container">
-    <form method="post" action="/{{ action }}">
+    <form method="post" action="/{{ action }}/submit">
         <h2>{{ action|capitalize }}</h2>
         {% if action == 'login' %}
             <p class="subtitle">Continue where you left off</p>
         {% elif action == 'register' %}
             <p class="subtitle">Create your new account now</p>
         {% endif %}
+
+        <!-- Auth message container -->
+        {% if message %}
+        <div class="auth-message-container">
+            <div class="auth-message">{{ message }}</div>
+        </div>
+        {% endif %}
+
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required placeholder="Username">

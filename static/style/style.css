@@ -302,6 +302,21 @@ div, p, a{
     color: var(--light-text);
 }
 
+.auth-container .auth-message-container{
+    width: 100%;
+    padding: .5rem 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    text-align: center;
+    background-color: var(--yellow-light);
+    border: 2px solid var(--yellow);
+    color: var(--fg-color);
+}
+
+.auth-message-container div{
+    color: inherit;
+}
+
 .auth-container .switch-action{
     margin-top: 0rem;
     font-size: 1rem;
