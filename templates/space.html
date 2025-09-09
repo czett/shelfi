@@ -40,6 +40,61 @@
                 </a>
             {% endif %}
         </div>
+
+        <div class="child overview">
+            <!-- <div class="no-messages-text">
+                There are no new notifications.
+            </div> -->
+            <div class="message warning">
+                <div class="message-icon">
+                    <span class="material-symbols-rounded">warning</span>
+                </div>
+                <div class="message-text">6 Products are close to being used up.</div>
+            </div>
+            <div class="message alert">
+                <div class="message-icon">
+                    <span class="material-symbols-rounded">notification_important</span>
+                </div>
+                <div class="message-text">There are 27 products exiring soon.</div>
+            </div>
+        </div>
+
+        <div class="child space-shopping-list list-view">
+            <div class="dashboard-child-title list-title">
+                Shopping List
+            </div>
+            <div class="dashboard-child-subtitle list-subtitle">
+                Items to buy for this space
+            </div>
+
+            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm()">
+                <div class="add-shopping-list-item-icon add-list-item-icon">
+                    <span class="material-symbols-rounded">add</span>
+                </div>
+                <div class="add-shopping-list-item-text add-list-item-text">Add New Item</div>
+            </div>
+
+            <div class="shopping-list list-items">
+                {% for item in shopping_list %}
+                    <div class="item-card list-item-card" id="shopping-list-item-{{ item.id }}">
+                        <div class="space-icon-and-name list-item-main">
+                            <div class="item-card-checkbox list-item-icon" data-checked="false">
+                                <!-- <span class="material-symbols-rounded">fork_spoon</span> -->
+                            </div>
+                            <div class="item-card-name list-item-name">{{item.product_name}}</div>
+                        </div>
+                        <div class="item-card-info list-item-info">added by <span style="font-weight: 700;">@{{item.username}}</span> on {{item.created_at}}</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="shopping-list-form list-form" data-expanded="false">
+                <form action="/api/add-to-shopping-list" enctype="multipart/form-data" method="post">
+                    <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
+                    <button type="submit">Add to list</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

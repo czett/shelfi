@@ -17,7 +17,7 @@
                 </div>
                 <div class="quick-action-name">New Item</div>
             </div>
-            <div class="quick-action" onmousedown="expandCreateSpaceForm()">
+            <div class="quick-action" onmousedown="expandListForm()">
                 <div class="quick-action-icon">
                     <span class="material-symbols-rounded">soup_kitchen</span>
                 </div>
@@ -32,7 +32,10 @@
         </div>
         
         <div class="child overview">
-            <div class="message warning">
+            <div class="no-messages-text">
+                There are no new notifications.
+            </div>
+            <!-- <div class="message warning">
                 <div class="message-icon">
                     <span class="material-symbols-rounded">warning</span>
                 </div>
@@ -43,7 +46,7 @@
                     <span class="material-symbols-rounded">notification_important</span>
                 </div>
                 <div class="message-text">There are 27 products exiring soon.</div>
-            </div>
+            </div> -->
         </div>
         
         <div class="child spaces">
@@ -54,28 +57,28 @@
                 Overview of your kitchen spaces
             </div>
 
-            <div class="create-space-button" onmousedown="expandCreateSpaceForm()">
-                <div class="create-space-icon">
+            <div class="create-space-button add-list-item-button" onmousedown="expandListForm()">
+                <div class="create-space-icon add-list-item-icon">
                     <span class="material-symbols-rounded">add</span>
                 </div>
-                <div class="create-space-text">Create New Space</div>
+                <div class="create-space-text add-list-item-text">Create New Space</div>
             </div>
 
-            <div class="spaces-list">
+            <div class="spaces-list list-items">
                 {% for space in spaces %}
-                <a class="space-card" href="/space/{{space.id}}">
-                    <div class="space-icon-and-name">
-                        <div class="space-card-icon">
-                            <span class="material-symbols-rounded">fork_spoon</span>
+                    <a class="space-card list-item-card" href="/space/{{space.id}}">
+                        <div class="space-icon-and-name list-item-main">
+                            <div class="space-card-icon list-item-icon">
+                                <span class="material-symbols-rounded">fork_spoon</span>
+                            </div>
+                            <div class="space-card-name list-item-name">{{space.name}}</div>
                         </div>
-                        <div class="space-card-name">{{space.name}}</div>
-                    </div>
-                    <div class="space-card-count">{{space.members}} member(s)</div>
-                </a>
+                        <div class="space-card-count list-item-info">{{space.members}} member(s)</div>
+                    </a>
                 {% endfor %}
             </div>
 
-            <div class="create-space-form" data-expanded="false">
+            <div class="create-space-form list-form" data-expanded="false">
                 <form action="/api/create-space">
                     <input type="text" id="space_name" name="space_name" required placeholder="Space Name">
                     <button type="submit">Submit</button>
@@ -84,21 +87,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function expandCreateSpaceForm() {
-        // const button = document.querySelector('.create-space-button');
-        const form = document.querySelector('.create-space-form');
-
-        
-        if (form.getAttribute('data-expanded') === 'false') {
-            form.style.transform = "translate(50%, 0%)";
-            form.setAttribute('data-expanded', 'true');
-        } else {
-            form.style.transform = "translate(50%, 100%)";
-            form.setAttribute('data-expanded', 'false');
-        }
-    }
-</script>
 
 {% endblock %}

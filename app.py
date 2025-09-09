@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, session, request
 import database, dotenv, os, re
+from datetime import datetime
 
 try:
     dotenv.load_dotenv()
@@ -17,6 +18,7 @@ def check_logged_in():
 def index():
     if check_logged_in():
         return redirect('/dashboard')
+    
     return render_template('index.html', session=session)
 
 @app.route('/login')
@@ -94,6 +96,8 @@ def create_space():
     
     user_id = session.get('user_id')
     space_name = request.values.get('space_name')
+    if space_name:
+        space_name = space_name.capitalize()
     
     if not space_name or len(space_name) > 100:
         return "Invalid space name.", 400
@@ -112,7 +116,50 @@ def view_space(space_id):
     space = database.get_space_details(space_id)
     items = database.get_space_items(space_id)
     
-    return render_template('space.html', session=session, space=space, items=items)
+    session['current_space_id'] = space_id
+    
+    # get shopping list
+    shopping_list = database.get_shopping_list(space_id)
+    for item in shopping_list:
+        user_id = item.get('added_by_user_id')
+        # Get username from user_id
+        item['username'] = database.get_username(user_id)
+        
+        if item.get('created_at'):
+            try:
+                # Assume item['created_at'] is a SQL timestamp (string or float)
+                if isinstance(item['created_at'], (int, float)):
+                    dt = datetime.fromtimestamp(item['created_at'])
+                else:
+                    # Try parsing as string
+                    dt = datetime.fromisoformat(str(item['created_at']))
+                item['created_at'] = dt.strftime('%b %d, %Y')
+            except Exception:
+                pass
+    
+    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list)
+
+@app.route("/api/add-to-shopping-list", methods=['POST'])
+def add_to_shopping_list():
+    if not check_logged_in():
+        return redirect('/login')
+    
+    item_name = request.form.get('item_name')
+    if item_name:
+        item_name = item_name.capitalize()
+        
+    space_id = session.get('current_space_id')
+    user_id = session.get('user_id')
+    
+    if not space_id or not item_name or len(item_name) > 100:
+        return "Invalid input.", 400
+    
+    success, message = database.add_item_to_shopping_list(space_id, user_id, item_name)
+    
+    if success:
+        return redirect(f'/space/{space_id}')
+    else:
+        return message, 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

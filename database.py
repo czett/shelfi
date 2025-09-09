@@ -78,6 +78,21 @@ def get_user_id(username):
     finally:
         conn.close()
         
+def get_username(user_id):
+    conn = get_db_connection()
+    if conn is None:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT username FROM users WHERE user_id = %s", (user_id,))
+            result = cur.fetchone()
+            return result[0] if result else None
+    except Exception as e:
+        print("Error fetching username:", e)
+        return None
+    finally:
+        conn.close()
+        
 def get_user_spaces(user_id):
     conn = get_db_connection()
     if conn is None:
@@ -190,6 +205,53 @@ def get_space_items(space_id):
             ]
     except Exception as e:
         print("Error fetching space items:", e)
+        return []
+    finally:
+        conn.close()
+        
+def add_item_to_shopping_list(space_id, user_id, item_name):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO shopping_list (space_id, added_by_user_id, product_name)
+                VALUES (%s, %s, %s)
+            """, (space_id, user_id, item_name))
+            conn.commit()
+            return True, "Item added to shopping list."
+    except Exception as e:
+        print("Error adding item to shopping list:", e)
+        return False, "An error occurred while adding the item."
+    finally:
+        conn.close()
+        
+def get_shopping_list(space_id):
+    conn = get_db_connection()
+    if conn is None:
+        return []
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at
+                FROM shopping_list
+                WHERE space_id = %s
+                ORDER BY created_at DESC
+            """, (space_id,))
+            items = cur.fetchall()
+            return [
+                {
+                    'list_item_id': row[0],
+                    'space_id': row[1],
+                    'product_name': row[2],
+                    'added_by_user_id': row[3],
+                    'created_at': row[4]
+                }
+                for row in items
+            ]
+    except Exception as e:
+        print("Error fetching shopping list:", e)
         return []
     finally:
         conn.close()

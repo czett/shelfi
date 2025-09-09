@@ -146,7 +146,7 @@ div, p, a{
     padding: var(--ypad);
     border-radius: var(--radius-big);
     background-color: var(--light-bg);
-    position: relative;
+    position: relative !important;
 }
 
 .dashboard .row .child.quick-actions{
@@ -265,6 +265,17 @@ div, p, a{
     font-weight: 600;
 }
 
+.no-messages-text{
+    display: block;
+    width: 75%;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+}
+
 .overview .message.warning{
     background-color: var(--orange-light);
 }
@@ -312,7 +323,7 @@ div, p, a{
 
 /* spaces list, similar to messages */
 
-.child.spaces .spaces-list{
+.child .list-items{
     flex: 1;
     /* overflow-y: auto; */
     display: flex;
@@ -320,7 +331,7 @@ div, p, a{
     gap: 1rem;
 }
 
-.child.spaces .spaces-list .space-card{
+.child .list-item-card{
     background-color: var(--bg-color);
     border-radius: var(--radius);
     padding: 1rem;
@@ -332,39 +343,40 @@ div, p, a{
     cursor: pointer;
 }
 
-.space-card div{
+.list-item-card div{
     /* font-weight: 700; */
     font-size: 1.1rem;
 }
 
-.space-card:hover{
+.list-item-card:hover{
     filter: brightness(0.95);
 }
 
-.child.spaces .spaces-list .space-card .space-card-icon{
+.child .list-item-icon{
     display: flex;
     justify-content: center;
     align-items: center;   
 }
 
-.space-card .space-card-icon span{
+.list-item-icon span{
     color: var(--fg-color);
     font-size: 2rem;
 }
-.space-card .space-icon-and-name{
+
+.list-item-main{
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.space-card .space-icon-and-name div{
+.list-item-main div{
     font-size: 1.25rem;
     font-weight: 700;
 }
 
 /* create space floating button */
 
-.child.spaces .create-space-button{
+.child .add-list-item-button{
     position: absolute;
     inset: var(--ypad) var(--ypad) auto auto;
     background-color: var(--fg-color);
@@ -378,21 +390,21 @@ div, p, a{
     cursor: pointer;
 }
 
-.child.spaces .create-space-icon{
+.child .add-list-item-icon{
     display: flex;
     justify-content: center;
     align-items: center;
     color: inherit;
 }
 
-.child.spaces .create-space-icon span{
+.child .add-list-item-icon span{
     font-size: 2rem;
     color: inherit;
 }
 
 /* create new space form */
 
-.create-space-form{
+.list-form{
     position: absolute;
     inset: auto 50% 0% auto;
     background-color: var(--light-border);
@@ -405,7 +417,7 @@ div, p, a{
     padding: 1rem;
 }
 
-.create-space-form form{
+.list-form form{
     width: 100%;
     display: flex;
     gap: 1rem;
@@ -413,7 +425,7 @@ div, p, a{
     align-items: center;
 }
 
-.create-space-form form input{
+.list-form form input{
     flex: 3;
     padding: 1ch 1.5ch;
     font-size: 1rem;
@@ -424,7 +436,7 @@ div, p, a{
     font-weight: 700;
 }
 
-.create-space-form form button{
+.list-form form button{
     flex: 1;
     padding: 1ch 1.5ch;
     font-size: 1rem;
@@ -600,4 +612,29 @@ div, p, a{
 
 .space-overview a.btn:hover{
     filter: brightness(1.1);
+}
+
+/* shopping list in space view */
+
+.space-shopping-list{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    /* gap: var(--ypad); */
+    flex-direction: column;
+}
+
+.space-shopping-list .shopping-list{
+    overflow-y: scroll;
+    flex-direction: column;
+    display: flex;
+    flex-direction: column;
+}
+
+.shopping-list .item-card-checkbox{
+    cursor: pointer;
+    border-radius: 25%;
+    aspect-ratio: 1;
+    width: 1.5rem;
+    border: 2px solid var(--fg-color);
 }
