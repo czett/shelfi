@@ -76,11 +76,15 @@
 
             <div class="shopping-list list-items">
                 {% for item in shopping_list %}
-                    <div class="item-card list-item-card" id="shopping-list-item-{{ item.id }}">
+                    <div class="item-card list-item-card" id="shopping-list-item-{{ item.list_item_id }}">
                         <div class="space-icon-and-name list-item-main">
-                            <div class="item-card-checkbox list-item-icon" data-checked="false">
-                                <!-- <span class="material-symbols-rounded">fork_spoon</span> -->
-                            </div>
+                            <a class="item-card-checkbox list-item-icon" id="item-card-checkbox-{{ item.list_item_id }}" data-checked="false" href="/api/toggle-shopping-list-item/{{item.list_item_id}}">
+                                <!-- <div class="item-card-checkbox-filling"></div> -->
+                                {% if item.checked %}
+                                    <div class="item-card-checkbox-filling"></div>
+                                {% endif %}
+                            </a>
+
                             <div class="item-card-name list-item-name">{{item.product_name}}</div>
                         </div>
                         <div class="item-card-info list-item-info">added by <span style="font-weight: 700;">@{{item.username}}</span> on {{item.created_at}}</div>

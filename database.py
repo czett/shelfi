@@ -234,7 +234,7 @@ def get_shopping_list(space_id):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at
+                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked
                 FROM shopping_list
                 WHERE space_id = %s
                 ORDER BY created_at DESC
@@ -246,12 +246,32 @@ def get_shopping_list(space_id):
                     'space_id': row[1],
                     'product_name': row[2],
                     'added_by_user_id': row[3],
-                    'created_at': row[4]
+                    'created_at': row[4],
+                    'checked': row[5]
                 }
                 for row in items
             ]
     except Exception as e:
         print("Error fetching shopping list:", e)
         return []
+    finally:
+        conn.close()
+
+def toggle_shopping_list_item(list_item_id):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE shopping_list
+                SET checked = NOT checked
+                WHERE list_item_id = %s
+            """, (list_item_id,))
+            conn.commit()
+            return True, "Item toggled."
+    except Exception as e:
+        print("Error toggling item:", e)
+        return False, "An error occurred while toggling the item."
     finally:
         conn.close()

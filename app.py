@@ -161,5 +161,17 @@ def add_to_shopping_list():
     else:
         return message, 500
 
+@app.route("/api/toggle-shopping-list-item/<item_id>")
+def toggle_shopping_list_item(item_id):
+    if not check_logged_in():
+        return redirect('/login')
+    
+    success, message = database.toggle_shopping_list_item(item_id)
+    
+    if success:
+        return redirect(f'/space/{session.get("current_space_id")}')
+    else:
+        return message, 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
