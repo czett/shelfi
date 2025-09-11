@@ -237,7 +237,7 @@ def get_shopping_list(space_id):
                 SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked
                 FROM shopping_list
                 WHERE space_id = %s
-                ORDER BY created_at DESC
+                ORDER BY checked, created_at DESC
             """, (space_id,))
             items = cur.fetchall()
             return [
@@ -275,3 +275,57 @@ def toggle_shopping_list_item(list_item_id):
         return False, "An error occurred while toggling the item."
     finally:
         conn.close()
+
+def add_item_to_space_list(space_id, user_id, item_name, date, amount, unit):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO items (space_id, added_by_user_id, product_name, expiration_date, quantity, unit)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (space_id, user_id, item_name, date, amount, unit))
+            conn.commit()
+            return True, "Item added to space list."
+    except Exception as e:
+        print("Error adding item to space list:", e)
+        return False, "An error occurred while adding the item."
+    finally:
+        conn.close()
+
+def get_space_items(space_id):
+    conn = get_db_connection()
+    if conn is None:
+        return []
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT item_id, product_name, quantity, unit, barcode, image_url, expiration_date, added_by_user_id, barcode, image_url
+                FROM items
+                WHERE space_id = %s
+            """, (space_id,))
+            items = cur.fetchall()
+            return [
+                {
+                    'id': row[0],
+                    'name': row[1],
+                    # quantity as int
+                    'quantity': int(row[2]),
+                    'unit': row[3],
+                    'barcode': row[4],
+                    'image_url': row[5],
+                    'expiration_date': row[6],
+                    'added_by_user': row[7],
+                    'barcode': row[8],
+                    'image_url': row[9]
+                }
+                for row in items
+            ]
+    except Exception as e:
+        print("Error fetching space items:", e)
+        return []
+    finally:
+        conn.close()
+
+get_space_items(2)

@@ -114,7 +114,6 @@ def view_space(space_id):
         return redirect('/login')
     
     space = database.get_space_details(space_id)
-    items = database.get_space_items(space_id)
     
     session['current_space_id'] = space_id
     
@@ -136,6 +135,9 @@ def view_space(space_id):
                 item['created_at'] = dt.strftime('%b %d, %Y')
             except Exception:
                 pass
+
+    # get items in space
+    items = database.get_space_items(space_id)
     
     return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list)
 
@@ -170,6 +172,36 @@ def toggle_shopping_list_item(item_id):
     
     if success:
         return redirect(f'/space/{session.get("current_space_id")}')
+    else:
+        return message, 500
+    
+@app.route("/api/add-to-space-list", methods=['POST'])
+def add_item_to_space_list():
+    if not check_logged_in():
+        return redirect('/login')
+    
+    item_name = request.form.get('item_name')
+    #if item_name:
+    #    item_name = item_name.capitalize()
+
+    date = request.form.get('expiration_date')
+    # date null in db if not passed through, as its optional
+    if not date:
+        date = None
+
+    amount = request.form.get('amount')
+    unit = request.form.get('unit')
+        
+    space_id = session.get('current_space_id')
+    user_id = session.get('user_id')
+    
+    if not space_id or not item_name or len(item_name) > 100:
+        return "Invalid input.", 400
+    
+    success, message = database.add_item_to_space_list(space_id, user_id, item_name, date, amount, unit)
+    
+    if success:
+        return redirect(f'/space/{space_id}')
     else:
         return message, 500
 

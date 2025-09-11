@@ -125,11 +125,15 @@ div, p, a{
     margin-top: 10dvh;
     max-width: 100%;
     overflow-x: hidden;
+    margin-bottom: 5dvh;
     /* background-color: var(--indigo); */
 }
 
 .dashboard{
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ypad);
     /* background-color: var(--yellow); */
 }
 
@@ -408,7 +412,7 @@ div, p, a{
     position: absolute;
     inset: auto 50% 0% auto;
     background-color: var(--light-border);
-    min-width: 50%;
+    min-width: 60%;
     width: fit-content;
     overflow: hidden;
     max-width: 100%;
@@ -425,7 +429,16 @@ div, p, a{
     align-items: center;
 }
 
-.list-form form input{
+.big-list-form form{
+    flex-direction: column !important;
+}
+
+.big-list-form form input, .big-list-form form button{
+    flex: 1;
+    width: 100%;
+}
+
+.list-form form input, .list-form form select{
     flex: 3;
     padding: 1ch 1.5ch;
     font-size: 1rem;
@@ -446,6 +459,28 @@ div, p, a{
     border-radius: calc(0.75*var(--radius));
     outline: none;
     font-weight: 700;
+}
+
+/* amount and unit picker component */
+
+.number-and-option-picker{
+    display: flex;
+    width: 100%;
+    justify-content: start;
+    align-items: start;
+    gap: 1rem;
+}
+
+.number-and-option-picker input, .number-and-option-picker select{
+    width: auto !important;
+    flex: 1 !important;
+}
+
+.helper-label{
+    font-weight: 700;
+    width: 100%;
+    font-size: 1.1rem;
+    text-align: left;
 }
 
 /* auth ui :3 */
@@ -653,10 +688,77 @@ div, p, a{
     border-radius: .3rem;
 }
 
+.checked-list-item{
+    opacity: 0.5;
+}
+
+.checked-list-item:hover{
+    opacity: 0.75;
+}
+
+/* items view */
+
+.full-width-child{
+    width: 100%;
+}
+
+.row.auto-ratio-row{
+    aspect-ratio: auto;
+    height: fit-content;
+}
+
+.tile-view{
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+}
+
+.tile-view.item-tiles{
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.tile-view .tile{
+    aspect-ratio: 1;
+    border-radius: var(--radius-big);
+    background: var(--bg-color);
+    /*border: 2px solid var(--lines);*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.tile:hover{
+    filter: brightness(.95);
+    scale: 1.02;
+}
+
+.tile .tile-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tile .tile-icon span{
+    color: var(--light-text);
+    font-size: 7.5rem;
+}
+
+.tile .tile-name{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.tile .tile-info{
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
 /* responsive design */
 
 @media screen and (width < 2000px) {
-    .row{
+    .row:not(.auto-ratio-row){
         aspect-ratio: 3 !important;
     }
 }

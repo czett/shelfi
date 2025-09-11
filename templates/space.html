@@ -28,6 +28,10 @@
                     <span class="material-symbols-rounded">bakery_dining</span>
                     {{ items | length }} item(s)
                 </div>
+                <!--<div class="space-tag">
+                    <span class="material-symbols-rounded">shopping_cart</span>
+                    {{ shopping_list | length }} item(s) on shopping list
+                </div>-->
             </div>
             
             {% if session.username == space.creator %}
@@ -82,6 +86,11 @@
                                 <!-- <div class="item-card-checkbox-filling"></div> -->
                                 {% if item.checked %}
                                     <div class="item-card-checkbox-filling"></div>
+
+                                    <!-- apply checked class to corresponding list item div -->
+                                    <script>
+                                        document.getElementById("shopping-list-item-{{ item.list_item_id }}").classList.add("checked-list-item");
+                                    </script>
                                 {% endif %}
                             </a>
 
@@ -96,6 +105,63 @@
                 <form action="/api/add-to-shopping-list" enctype="multipart/form-data" method="post">
                     <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
                     <button type="submit">Add to list</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row auto-ratio-row">
+        <div class="full-width-child child">
+            <div class="dashboard-child-title">
+                Items
+            </div>
+            <div class="dashboard-child-subtitle">
+                Items in this space
+            </div>
+
+            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandBigListForm()">
+                <div class="add-shopping-list-item-icon add-list-item-icon">
+                    <span class="material-symbols-rounded">add</span>
+                </div>
+                <div class="add-shopping-list-item-text add-list-item-text">Add New Item</div>
+            </div>
+
+            <div class="item-tiles tile-view">
+                {% for item in items %}
+                <div class="tile item-tile">
+                    <div class="tile-icon">
+                        <span class="material-symbols-rounded">bakery_dining</span>
+                    </div>
+                    <div class="tile-name">
+                        {{item.name}}
+                    </div>
+                    <div class="tile-info">
+                        {{item.quantity}} {{item.unit}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="shopping-list-form list-form big-list-form" data-expanded="false">
+                <form action="/api/add-to-space-list" enctype="multipart/form-data" method="post">
+                    <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
+                    <label for="expiration_date" class="helper-label">Expiration Date (optional):</label>
+                    <input type="date" id="expiration_date" name="expiration_date" placeholder="Expiration Date">
+
+                    <div class="number-and-option-picker">
+                        <input type="number" id="amount" name="amount" required placeholder="Amount">
+                        <select name="unit" id="unit" required>
+                            <option value="Unit" disabled selected>Unit</option>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="pcs">pcs</option>
+                            <option value="cups">cups</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Add item to space</button>
                 </form>
             </div>
         </div>
