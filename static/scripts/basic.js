@@ -23,3 +23,14 @@ function expandBigListForm(){
         form.setAttribute('data-expanded', 'false');
     }
 }
+
+function expandModifyOverlay(itemID){
+    const overlay = document.querySelector(`#edit-overlay-${itemID}`);
+    if (overlay.getAttribute('data-expanded') === 'false') {
+        overlay.style.transform = "translate(-50%, -50%)";
+        overlay.setAttribute('data-expanded', 'true');
+    } else {
+        overlay.style.transform = "translate(-50%, 50%)";
+        overlay.setAttribute('data-expanded', 'false');
+    }
+}

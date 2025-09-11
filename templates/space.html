@@ -129,14 +129,24 @@
             <div class="item-tiles tile-view">
                 {% for item in items %}
                 <div class="tile item-tile">
-                    <div class="tile-icon">
-                        <span class="material-symbols-rounded">bakery_dining</span>
+                    <div class="tile-content" onmousedown="expandModifyOverlay({{item.id}})">
+                        <div class="tile-icon">
+                            <span class="material-symbols-rounded">bakery_dining</span>
+                        </div>
+                        <div class="tile-name">
+                            {{item.name}}
+                        </div>
+                        <div class="tile-info">
+                            {{item.quantity}} {{item.unit}}
+                        </div>
                     </div>
-                    <div class="tile-name">
-                        {{item.name}}
-                    </div>
-                    <div class="tile-info">
-                        {{item.quantity}} {{item.unit}}
+
+                    <div class="modify-overlay" id="edit-overlay-{{item.id}}" data-expanded="false">
+                        <form action="/api/modify-item-amount/{{item.id}}" enctype="multipart/form-data" method="post">
+                            <label for="amount" class="helper-label">New Amount</label>
+                            <input type="number" placeholder="New Amount" name="amount" value="{{item.quantity}}" min="0">
+                            <button>Modify</button>
+                        </form>
                     </div>
                 </div>
                 {% endfor %}

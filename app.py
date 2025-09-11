@@ -205,5 +205,19 @@ def add_item_to_space_list():
     else:
         return message, 500
 
+@app.route("/api/modify-item-amount/<item_id>", methods=['POST'])
+def modify_item_amount(item_id):
+    if not check_logged_in():
+        return redirect('/login')
+    
+    amount = request.form.get('amount')
+    
+    success, message = database.modify_item_amount(item_id, amount)
+    
+    if success:
+        return redirect(f'/space/{session.get("current_space_id")}')
+    else:
+        return message, 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

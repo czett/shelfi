@@ -328,4 +328,21 @@ def get_space_items(space_id):
     finally:
         conn.close()
 
-get_space_items(2)
+def modify_item_amount(item_id, amount):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE items
+                SET quantity = %s
+                WHERE item_id = %s
+            """, (amount, item_id))
+            conn.commit()
+            return True, "Item quantity modified."
+    except Exception as e:
+        print("Error modifying item quantity:", e)
+        return False, "An error occurred while modifying the item quantity."
+    finally:
+        conn.close()
