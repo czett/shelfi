@@ -257,6 +257,7 @@ div, p, a{
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: .5ch;
 }
 
 .overview .message .message-icon span{
@@ -389,7 +390,7 @@ div, p, a{
     justify-content: start;
     align-items: center;
     color: var(--bg-color);
-    padding: .75rem 1rem;
+    padding: .5rem .75rem;
     gap: .5rem;
     cursor: pointer;
 }
@@ -723,6 +724,7 @@ div, p, a{
     background: var(--bg-color);
     /*border: 2px solid var(--lines);*/
     overflow: hidden;
+    position: relative;
 }
 
 .tile .tile-content{
@@ -794,22 +796,74 @@ div, p, a{
 
 @media screen and (width < 2000px) {
     .row:not(.auto-ratio-row){
-        aspect-ratio: 3 !important;
+        aspect-ratio: 3;
     }
 }
 
-@media screen and (width < 1000px) {
+@media screen and (width < 1700px){
+    .child.spaces{
+        width: 40% !important;
+    }
+
+    .child.overview{
+        width: 20% !important;
+        min-width: 20% !important;
+    }
+
+    .tile-view{
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media screen and (width < 1350px) {
     :root{
-        --xpad: .5rem;
+        --xpad: 2rem;
     }
 
     .row{
         aspect-ratio: auto !important;
         flex-direction: column !important;
+        height: fit-content !important;
     }
     
-    .row div{
+    .row .child{
         width: 100% !important;
+        min-width: 100% !important;
         flex: 0 !important;
+        min-height: 35dvh;
+    }
+
+    .shopping-list .item-card-info{
+        font-size: .75rem;
+    }
+}
+
+@media screen and (width < 1100px) {
+    .tile-view{
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media screen and (width < 900px) {
+    :root{
+        --xpad: .75rem;
+        --ypad: 1rem;
+    }
+
+    .add-list-item-button{
+        font-size: .75rem;
+        padding: .2rem .4rem;
+    }
+
+    .add-list-item-text{
+        display: none;
+    }
+
+    .tile-view{
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .quick-action-icon{
+        width: 50% !important;
     }
 }

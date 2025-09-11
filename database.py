@@ -183,10 +183,9 @@ def get_space_items(space_id):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT item_id, product_name, quantity, unit, barcode, image_url, expiration_date, added_by_user_id, added_at
+                SELECT item_id, product_name, quantity, unit, barcode, image_url, expiration_date, added_by_user_id
                 FROM items
                 WHERE space_id = %s
-                ORDER BY added_at DESC
             """, (space_id,))
             items = cur.fetchall()
             return [
@@ -199,7 +198,6 @@ def get_space_items(space_id):
                     'image_url': row[5],
                     'expiration_date': row[6],
                     'added_by_user': row[7],
-                    'added_at': row[8]
                 }
                 for row in items
             ]

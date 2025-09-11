@@ -34,7 +34,8 @@
                 </div>-->
             </div>
             
-            {% if session.username == space.creator %}
+            <!-- danger zone like this, but not in here -->
+            <!--{% if session.username == space.creator %}
                 <a href="/" class="btn btn-danger">
                     Delete Space
                 </a>
@@ -42,7 +43,7 @@
                 <a href="/" class="btn btn-warning">
                     Leave Space
                 </a>
-            {% endif %}
+            {% endif %}-->
         </div>
 
         <div class="child overview">
@@ -131,7 +132,7 @@
                 <div class="tile item-tile">
                     <div class="tile-content" onmousedown="expandModifyOverlay({{item.id}})">
                         <div class="tile-icon">
-                            <span class="material-symbols-rounded">bakery_dining</span>
+                            <span class="material-symbols-rounded">grocery</span>
                         </div>
                         <div class="tile-name">
                             {{item.name}}
@@ -144,7 +145,7 @@
                     <div class="modify-overlay" id="edit-overlay-{{item.id}}" data-expanded="false">
                         <form action="/api/modify-item-amount/{{item.id}}" enctype="multipart/form-data" method="post">
                             <label for="amount" class="helper-label">New Amount</label>
-                            <input type="number" placeholder="New Amount" name="amount" value="{{item.quantity}}" min="0">
+                            <input type="number" placeholder="New Amount" name="amount" value="{{item.quantity}}" min="0" required>
                             <button>Modify</button>
                         </form>
                     </div>
