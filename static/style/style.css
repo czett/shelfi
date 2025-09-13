@@ -326,6 +326,11 @@ div, p, a{
     margin-bottom: 1rem;
 }
 
+.dashboard-child-subtitle a{
+    color: var(--red);
+    font-weight: 700;
+}
+
 /* spaces list, similar to messages */
 
 .child .list-items{
@@ -847,7 +852,7 @@ div, p, a{
 @media screen and (width < 900px) {
     :root{
         --xpad: .75rem;
-        --ypad: 1rem;
+        --ypad: .75rem;
     }
 
     .add-list-item-button{
@@ -860,10 +865,30 @@ div, p, a{
     }
 
     .tile-view{
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(1, 1fr) !important;
+        gap: .5rem !important;
+    }
+
+    .tile-view .tile{
+        aspect-ratio: 2 !important;
+    }
+
+    .tile-icon span{
+        font-size: 3rem !important;
+    }
+
+    .tile-name{
+        font-size: 1rem !important;
     }
 
     .quick-action-icon{
         width: 50% !important;
+    }
+
+    .list-item-card{
+        display: flex;
+        flex-direction: column;
+        align-items: start !important;
+        gap: .5rem;
     }
 }

@@ -54,13 +54,13 @@
                 <div class="message-icon">
                     <span class="material-symbols-rounded">warning</span>
                 </div>
-                <div class="message-text">6 Products are close to being used up.</div>
+                <div class="message-text">There are {{num_expiring_soon}} products expiring soon.</div>
             </div>
             <div class="message alert">
                 <div class="message-icon">
                     <span class="material-symbols-rounded">notification_important</span>
                 </div>
-                <div class="message-text">There are 27 products exiring soon.</div>
+                <div class="message-text">{{num_expired}} products are already expired.</div>
             </div>
         </div>
 
@@ -69,7 +69,7 @@
                 Shopping List
             </div>
             <div class="dashboard-child-subtitle list-subtitle">
-                Items to buy for this space
+                <a href="/api/clear-shopping-list" class="btn btn-danger">Clear Completed Items</a>
             </div>
 
             <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm()">
@@ -81,6 +81,7 @@
 
             <div class="shopping-list list-items">
                 {% for item in shopping_list %}
+                    {% if item.visible %}
                     <div class="item-card list-item-card" id="shopping-list-item-{{ item.list_item_id }}">
                         <div class="space-icon-and-name list-item-main">
                             <a class="item-card-checkbox list-item-icon" id="item-card-checkbox-{{ item.list_item_id }}" data-checked="false" href="/api/toggle-shopping-list-item/{{item.list_item_id}}">
@@ -99,6 +100,7 @@
                         </div>
                         <div class="item-card-info list-item-info">added by <span style="font-weight: 700;">@{{item.username}}</span> on {{item.created_at}}</div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 
@@ -136,6 +138,13 @@
                         </div>
                         <div class="tile-name">
                             {{item.name}}
+                        </div>
+                        <div class="tile-date">
+                        {% if item.readable_expiration_date %}
+                            expires {{item.readable_expiration_date}}
+                        {% else %}
+                            no expiration date
+                        {% endif %}
                         </div>
                         <div class="tile-info">
                             {{item.quantity}} {{item.unit}}

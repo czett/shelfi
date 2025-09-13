@@ -36,13 +36,15 @@ def register():
 @app.route('/login/submit', methods=['POST'])
 def login_submit():
     username = request.form['username']
+    username = username.lower()
     password = request.form['password']
-    success, message = database.login(username, password)
     
     # Sanitize username: allow only alphanumeric and underscores, reject others
     if not re.match(r'^\w+$', username):
         return render_template('auth.html', action='login', message='Invalid username: only letters, numbers, and underscores are allowed.', session=session)
     
+    success, message = database.login(username, password)
+
     if success:
         session['username'] = username
         session['logged_in'] = True
@@ -113,6 +115,10 @@ def view_space(space_id):
     if not check_logged_in():
         return redirect('/login')
     
+    # check if user is in space
+    if not database.is_user_in_space(session.get('user_id'), space_id):
+        return redirect('/dashboard')
+    
     space = database.get_space_details(space_id)
     
     session['current_space_id'] = space_id
@@ -138,8 +144,40 @@ def view_space(space_id):
 
     # get items in space
     items = database.get_space_items(space_id)
-    
-    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list)
+    #if expiration date is defined for an item in get items dict, add another key with info: expires in x days, but only the amount of days it will take to reach the stored and initially passed date.
+    if items:
+        for item in items:
+            if item.get('expiration_date'):
+                try:
+                    # Assume item['created_at'] is a SQL timestamp (string or float)
+                    if isinstance(item['expiration_date'], (int, float)):
+                        dt = datetime.fromtimestamp(item['expiration_date'])
+                    else:
+                        # Try parsing as string
+                        dt = datetime.fromisoformat(str(item['expiration_date']))
+                    item['readable_expiration_date'] = dt.strftime('%b %d, %Y')
+                except Exception:
+                    pass
+
+    num_expired = 0
+    num_expiring_soon = 0
+
+    # determine items that expire soon or are expired
+    for item in items:
+        if item.get('expiration_date'):
+            try:
+                # if expiration date is defined, assume the item is expired if current date if after expiration date OR save item as expiring soon if date is less than 3 days in the future
+                # first, check for already expired items
+                if datetime.now() > item['expiration_date']:
+                    num_expired += 1
+                else:
+                    # check if expiration date is less than 3 days in the future
+                    if datetime.now() + timedelta(days=3) > item['expiration_date']:
+                        num_expiring_soon += 1
+            except Exception:
+                pass
+
+    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
 @app.route("/api/add-to-shopping-list", methods=['POST'])
 def add_to_shopping_list():
@@ -216,6 +254,20 @@ def modify_item_amount(item_id):
     
     if success:
         return redirect(f'/space/{session.get("current_space_id")}')
+    else:
+        return message, 500
+    
+@app.route("/api/clear-shopping-list")
+def clear_shopping_list():
+    if not check_logged_in():
+        return redirect('/login')
+    
+    space_id = session.get('current_space_id')
+    
+    success, message = database.clear_shopping_list(space_id)
+    
+    if success:
+        return redirect(f'/space/{space_id}')
     else:
         return message, 500
 
