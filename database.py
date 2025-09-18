@@ -1,5 +1,5 @@
 import psycopg
-import dotenv, os
+import dotenv, os, requests
 import bcrypt
 from datetime import datetime
 
@@ -133,9 +133,23 @@ def create_space(user_id, space_name):
         return False, "An error occurred while creating the space."
     finally:
         conn.close()
+
+def is_user_in_space(user_id, space_id):
+    conn = get_db_connection()
+    if conn is None:
+        return False
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM user_spaces WHERE user_id = %s AND space_id = %s", (user_id, space_id))
+            result = cur.fetchone()
+            return result is not None
+    except Exception as e:
+        print("Error checking if user is in space:", e)
+        return False
+    finally:
+        conn.close()
         
 def get_space_details(space_id):
-
     conn = get_db_connection()
     if conn is None:
         return None
@@ -216,12 +230,14 @@ def add_item_to_shopping_list(space_id, user_id, item_name):
             cur.execute("""
                 INSERT INTO shopping_list (space_id, added_by_user_id, product_name)
                 VALUES (%s, %s, %s)
+                RETURNING list_item_id;
             """, (space_id, user_id, item_name))
+            new_id = cur.fetchone()[0]
             conn.commit()
-            return True, "Item added to shopping list."
+            return True, {"id": new_id}
     except Exception as e:
         print("Error adding item to shopping list:", e)
-        return False, "An error occurred while adding the item."
+        return False, str(e)
     finally:
         conn.close()
         
@@ -232,7 +248,7 @@ def get_shopping_list(space_id):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked
+                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked, visible
                 FROM shopping_list
                 WHERE space_id = %s
                 ORDER BY checked, created_at DESC
@@ -245,7 +261,8 @@ def get_shopping_list(space_id):
                     'product_name': row[2],
                     'added_by_user_id': row[3],
                     'created_at': row[4],
-                    'checked': row[5]
+                    'checked': row[5],
+                    'visible': row[6]
                 }
                 for row in items
             ]
@@ -344,3 +361,57 @@ def modify_item_amount(item_id, amount):
         return False, "An error occurred while modifying the item quantity."
     finally:
         conn.close()
+
+def clear_shopping_list(space_id):
+    conn = get_db_connection()
+    # set visible to false for all checked items in shopping_list table
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE shopping_list
+                SET visible = FALSE
+                WHERE space_id = %s and checked = TRUE
+            """, (space_id,))
+            conn.commit()
+            return True, "Shopping list cleared."
+    except Exception as e:
+        print("Error clearing shopping list:", e)
+        return False, "An error occurred while clearing the shopping list."
+    finally:
+        conn.close()
+
+def get_product_info_from_barcode(barcode):
+    url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
+
+    try:
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data['status'] == 1:
+                product_info = data['product']
+                
+                # Extract product name
+                product_name = product_info.get('product_name_en', product_info.get('product_name', 'Name not found'))
+                
+                # Extract photo URL
+                image_url = product_info.get('image_front_url', 'Photo not found')
+                
+                # Extract quantity and unit
+                quantity = product_info.get('quantity', 'Quantity not found')
+                
+                return {
+                    "name": product_name,
+                    "photo": image_url,
+                    "quantity": quantity
+                }
+            else:
+                return {"error": "Product not found."}
+        else:
+            return {"error": f"API request failed. Status code: {response.status_code}"}
+
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Connection error: {e}"}
