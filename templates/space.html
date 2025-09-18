@@ -154,7 +154,7 @@
                     </div>
 
                     <div class="modify-overlay" id="edit-overlay-{{item.id}}" data-expanded="false">
-                        <form action="/api/modify-item-amount/{{item.id}}" enctype="multipart/form-data" method="post">
+                        <form onsubmit="return modifyItemAmount(event, {{item.id}})">
                             <label for="amount" class="helper-label">New Amount</label>
                             <input type="number" placeholder="New Amount" name="amount" value="{{item.quantity}}" min="0" required>
                             <button>Modify</button>
@@ -165,22 +165,22 @@
             </div>
 
             <div class="shopping-list-form list-form big-list-form" data-expanded="false">
-                <form action="/api/add-to-space-list" enctype="multipart/form-data" method="post">
-                    <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
+                <form id="space-item-form" onsubmit="return addItemToSpace(event)">
+                    <input type="text" id="space_item_name" required placeholder="Item Name">
                     <label for="expiration_date" class="helper-label">Expiration Date (optional):</label>
-                    <input type="date" id="expiration_date" name="expiration_date" placeholder="Expiration Date">
+                    <input type="date" id="expiration_date">
 
                     <div class="number-and-option-picker">
-                        <input type="number" id="amount" name="amount" required placeholder="Amount">
-                        <select name="unit" id="unit" required>
-                            <option value="Unit" disabled selected>Unit</option>
-                            <option value="kg">kg</option>
-                            <option value="g">g</option>
-                            <option value="ml">ml</option>
-                            <option value="l">l</option>
-                            <option value="pcs">pcs</option>
-                            <option value="cups">cups</option>
-                        </select>
+                    <input type="number" id="amount" required placeholder="Amount">
+                    <select id="unit" required>
+                        <option value="Unit" disabled selected>Unit</option>
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                        <option value="ml">ml</option>
+                        <option value="l">l</option>
+                        <option value="pcs">pcs</option>
+                        <option value="cups">cups</option>
+                    </select>
                     </div>
 
                     <button type="submit">Add item to space</button>

@@ -222,47 +222,87 @@ def toggle_shopping_list_item(item_id):
 @app.route("/api/add-to-space-list", methods=['POST'])
 def add_item_to_space_list():
     if not check_logged_in():
-        return redirect('/login')
-    
-    item_name = request.form.get('item_name')
-    #if item_name:
-    #    item_name = item_name.capitalize()
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
 
-    date = request.form.get('expiration_date')
-    # date null in db if not passed through, as its optional
-    if not date:
-        date = None
+    data = request.get_json()
+    if not data:
+        return jsonify({"success": False, "message": "Invalid JSON"}), 400
 
-    amount = request.form.get('amount')
-    unit = request.form.get('unit')
-        
+    item_name = data.get("item_name", "").strip()
+    expiration_date = data.get("expiration_date") or None
+    amount = data.get("amount")
+    unit = data.get("unit")
     space_id = session.get('current_space_id')
     user_id = session.get('user_id')
-    
-    if not space_id or not item_name or len(item_name) > 100:
-        return "Invalid input.", 400
-    
-    success, message = database.add_item_to_space_list(space_id, user_id, item_name, date, amount, unit)
-    
-    if success:
-        return redirect(f'/space/{space_id}')
-    else:
-        return message, 500
 
-@app.route("/api/modify-item-amount/<item_id>", methods=['POST'])
+    if not space_id or not item_name or not amount or not unit or len(item_name) > 100:
+        return jsonify({"success": False, "message": "Invalid input."}), 400
+
+    # DB-Funktion gibt jetzt direkt die neue ID zurück
+    success, message, new_id = database.add_item_to_space_list(
+        space_id, user_id, item_name, expiration_date, amount, unit
+    )
+
+    if success:
+        readable_exp = None
+        if expiration_date:
+            try:
+                readable_exp = datetime.fromisoformat(expiration_date).strftime('%b %d, %Y')
+            except Exception:
+                pass
+
+        return jsonify({
+            "success": True,
+            "item": {
+                "id": new_id,
+                "name": item_name,
+                "quantity": amount,
+                "unit": unit,
+                "readable_expiration_date": readable_exp
+            }
+        })
+    else:
+        return jsonify({"success": False, "message": message}), 500
+
+@app.route("/api/modify-item-amount/<int:item_id>", methods=["POST"])
 def modify_item_amount(item_id):
     if not check_logged_in():
-        return redirect('/login')
-    
-    amount = request.form.get('amount')
-    
-    success, message = database.modify_item_amount(item_id, amount)
-    
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"success": False, "message": "Invalid JSON"}), 400
+
+    try:
+        new_amount = int(data.get("amount"))
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "message": "Invalid amount"}), 400
+
+    success, message = database.modify_item_amount(item_id, new_amount)
+
     if success:
-        return redirect(f'/space/{session.get("current_space_id")}')
+        # Optional: zurückgeben, wie das Item jetzt aussieht
+        item = database.get_item_by_id(item_id)
+        readable_exp = None
+        if item.get("expiration_date"):
+            try:
+                readable_exp = item["expiration_date"].strftime("%b %d, %Y")
+            except Exception:
+                readable_exp = str(item["expiration_date"])
+
+        return jsonify({
+            "success": True,
+            "item": {
+                "id": item_id,
+                "name": item.get("name"),
+                "quantity": item.get("quantity"),
+                "unit": item.get("unit"),
+                "readable_expiration_date": readable_exp
+            }
+        })
     else:
-        return message, 500
-    
+        return jsonify({"success": False, "message": message}), 500
+
 @app.route("/api/clear-shopping-list", methods=['POST'])
 def clear_shopping_list():
     if not check_logged_in():
@@ -311,7 +351,6 @@ def add_item_to_shopping_list():
         })
     else:
         return jsonify({"success": False, "message": result}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
