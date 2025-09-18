@@ -140,3 +140,123 @@ function addShoppingListItemToDOM(item) {
 
   expandListForm();
 }
+
+function addItemToSpace(e) {
+    e.preventDefault(); // blockiert Standard-Submit
+
+    const name = document.querySelector("#space_item_name").value.trim();
+    const expiration = document.querySelector("#expiration_date").value || null;
+    const amount = document.querySelector("#amount").value.trim();
+    const unit = document.querySelector("#unit").value;
+
+    if (!name || !amount || !unit) return false;
+
+    fetch("/api/add-to-space-list", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            item_name: name,
+            expiration_date: expiration,
+            amount: amount,
+            unit: unit
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            addSpaceItemToDOM(data.item);
+            // Reset Form
+            document.querySelector("#space_item_name").value = "";
+            document.querySelector("#expiration_date").value = "";
+            document.querySelector("#amount").value = "";
+            document.querySelector("#unit").selectedIndex = 0;
+        } else {
+            console.error("Error:", data.message);
+        }
+    })
+    .catch(err => console.error("Request failed", err));
+
+    return false;
+}
+
+function addSpaceItemToDOM(item) {
+    const grid = document.querySelector(".item-tiles");
+
+    const tile = document.createElement("div");
+    tile.classList.add("tile", "item-tile");
+
+    tile.innerHTML = `
+      <div class="tile-content" onmousedown="expandModifyOverlay(${item.id})">
+        <div class="tile-icon">
+          <span class="material-symbols-rounded">grocery</span>
+        </div>
+        <div class="tile-name">${item.name}</div>
+        <div class="tile-date">
+          ${item.readable_expiration_date ? "expires " + item.readable_expiration_date : "no expiration date"}
+        </div>
+        <div class="tile-info">
+          ${item.quantity} ${item.unit}
+        </div>
+      </div>
+
+      <div class="modify-overlay" id="edit-overlay-${item.id}" data-expanded="false">
+        <form onsubmit="return modifyItemAmount(event, ${item.id})">
+          <label for="amount" class="helper-label">New Amount</label>
+          <input type="number" placeholder="New Amount" name="amount" value="${item.quantity}" min="0" required>
+          <button>Modify</button>
+        </form>
+      </div>
+    `;
+
+    grid.appendChild(tile);
+}
+
+function modifyItemAmount(e, itemID) {
+    e.preventDefault();
+
+    const input = e.target.querySelector("input[name='amount']");
+    const newAmount = Number(input.value);
+    if (isNaN(newAmount) || newAmount < 0) return false;
+
+    fetch(`/api/modify-item-amount/${itemID}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({ amount: newAmount })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            updateItemTileDOM(data.item);
+        } else {
+            console.error("Modify failed:", data.message);
+        }
+    })
+    .catch(err => console.error("Request failed", err));
+
+    expandModifyOverlay(itemID);
+
+    return false;
+}
+
+function updateItemTileDOM(item) {
+    const tile = document.querySelector(`.item-tile .tile-content[onmousedown*="expandModifyOverlay(${item.id})"]`);
+    if (!tile) return;
+
+    // quantity as Integer
+    const quantityInt = parseInt(item.quantity, 10);
+
+    // hide element when quantity is 0 further along the line
+
+    tile.querySelector(".tile-info").textContent = `${quantityInt} ${item.unit}`;
+
+    const dateDiv = tile.querySelector(".tile-date");
+    if (dateDiv) {
+        dateDiv.textContent = item.readable_expiration_date ? `expires ${item.readable_expiration_date}` : "no expiration date";
+    }
+}

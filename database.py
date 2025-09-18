@@ -291,23 +291,26 @@ def toggle_shopping_list_item(list_item_id):
     finally:
         conn.close()
 
-def add_item_to_space_list(space_id, user_id, item_name, date, amount, unit):
+def add_item_to_space_list(space_id, user_id, item_name, expiration_date, amount, unit):
     conn = get_db_connection()
     if conn is None:
-        return False, "Database connection failed."
+        return False, "Database connection failed.", None
     try:
         with conn.cursor() as cur:
             cur.execute("""
                 INSERT INTO items (space_id, added_by_user_id, product_name, expiration_date, quantity, unit)
                 VALUES (%s, %s, %s, %s, %s, %s)
-            """, (space_id, user_id, item_name, date, amount, unit))
+                RETURNING item_id
+            """, (space_id, user_id, item_name, expiration_date, amount, unit))
+            new_id = cur.fetchone()[0]
             conn.commit()
-            return True, "Item added to space list."
+            return True, "Item added to space list.", new_id
     except Exception as e:
         print("Error adding item to space list:", e)
-        return False, "An error occurred while adding the item."
+        return False, "An error occurred while adding the item.", None
     finally:
         conn.close()
+
 
 def get_space_items(space_id):
     conn = get_db_connection()
@@ -359,6 +362,33 @@ def modify_item_amount(item_id, amount):
     except Exception as e:
         print("Error modifying item quantity:", e)
         return False, "An error occurred while modifying the item quantity."
+    finally:
+        conn.close()
+
+def get_item_by_id(item_id):
+    conn = get_db_connection()
+    if conn is None:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT item_id AS id, product_name, quantity, unit, expiration_date
+                FROM items
+                WHERE item_id = %s
+            """, (item_id,))
+            row = cur.fetchone()
+            if row:
+                return {
+                    "id": row[0],
+                    "name": row[1],
+                    "quantity": row[2],
+                    "unit": row[3],
+                    "expiration_date": row[4]
+                }
+            return None
+    except Exception as e:
+        print("Error fetching item by id:", e)
+        return None
     finally:
         conn.close()
 
