@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, request
+from flask import Flask, render_template, redirect, session, request, jsonify
 import database, dotenv, os, re
 from datetime import datetime
 
@@ -201,13 +201,19 @@ def add_to_shopping_list():
     else:
         return message, 500
 
-@app.route("/api/toggle-shopping-list-item/<item_id>")
+@app.route("/api/toggle-shopping-list-item/<item_id>", methods=['POST'])
 def toggle_shopping_list_item(item_id):
     if not check_logged_in():
+        return jsonify({"success": False, "message": "You are not logged in."})
         return redirect('/login')
     
     success, message = database.toggle_shopping_list_item(item_id)
     
+    if success:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "message": message})
+
     if success:
         return redirect(f'/space/{session.get("current_space_id")}')
     else:
@@ -257,19 +263,55 @@ def modify_item_amount(item_id):
     else:
         return message, 500
     
-@app.route("/api/clear-shopping-list")
+@app.route("/api/clear-shopping-list", methods=['POST'])
 def clear_shopping_list():
     if not check_logged_in():
+        return jsonify({'success': False, 'message': 'You are not logged in.'})
         return redirect('/login')
     
     space_id = session.get('current_space_id')
     
     success, message = database.clear_shopping_list(space_id)
     
+    # return json format, as this is an api for the js in frontend
+    if success:
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'message': message})
+
     if success:
         return redirect(f'/space/{space_id}')
     else:
         return message, 500
+    
+@app.route("/api/add-item-to-shopping-list", methods=['POST'])
+def add_item_to_shopping_list():
+    if not check_logged_in():
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
+    
+    data = request.get_json()
+    item_name = data.get("item_name", "").strip().capitalize()
+    space_id = session.get("current_space_id")
+    user_id = session.get("user_id")
+
+    if not space_id or not item_name or len(item_name) > 100:
+        return jsonify({"success": False, "message": "Invalid input."}), 400
+
+    success, result = database.add_item_to_shopping_list(space_id, user_id, item_name)
+    
+    if success:
+        return jsonify({
+            "success": True,
+            "item": {
+                "list_item_id": result["id"],
+                "product_name": item_name,
+                "username": session["username"],
+                "created_at": datetime.now().strftime("%b %d, %Y")
+            }
+        })
+    else:
+        return jsonify({"success": False, "message": result}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

@@ -69,7 +69,7 @@
                 Shopping List
             </div>
             <div class="dashboard-child-subtitle list-subtitle">
-                <a href="/api/clear-shopping-list" class="btn btn-danger">Clear Completed Items</a>
+                <a onmousedown="clearShoppingList()" class="btn btn-danger">Clear Completed Items</a>
             </div>
 
             <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm()">
@@ -84,10 +84,10 @@
                     {% if item.visible %}
                     <div class="item-card list-item-card" id="shopping-list-item-{{ item.list_item_id }}">
                         <div class="space-icon-and-name list-item-main">
-                            <a class="item-card-checkbox list-item-icon" id="item-card-checkbox-{{ item.list_item_id }}" data-checked="false" href="/api/toggle-shopping-list-item/{{item.list_item_id}}">
+                            <a class="item-card-checkbox list-item-icon" id="item-card-checkbox-{{ item.list_item_id }}" data-checked="false" onmousedown="checkShoppingListItem({{ item.list_item_id }})">
                                 <!-- <div class="item-card-checkbox-filling"></div> -->
+                                <div class="item-card-checkbox-filling"></div>
                                 {% if item.checked %}
-                                    <div class="item-card-checkbox-filling"></div>
 
                                     <!-- apply checked class to corresponding list item div -->
                                     <script>
@@ -105,13 +105,15 @@
             </div>
 
             <div class="shopping-list-form list-form" data-expanded="false">
-                <form action="/api/add-to-shopping-list" enctype="multipart/form-data" method="post">
+                <form id="shopping-list-form" onsubmit="return addItem(event)">
                     <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
                     <button type="submit">Add to list</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- <input type="file" id="barcode-scan" accept="image/*" capture="environment"> -->
 
     <div class="row auto-ratio-row">
         <div class="full-width-child child">

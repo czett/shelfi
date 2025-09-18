@@ -1,5 +1,5 @@
 import psycopg
-import dotenv, os
+import dotenv, os, requests
 import bcrypt
 from datetime import datetime
 
@@ -230,12 +230,14 @@ def add_item_to_shopping_list(space_id, user_id, item_name):
             cur.execute("""
                 INSERT INTO shopping_list (space_id, added_by_user_id, product_name)
                 VALUES (%s, %s, %s)
+                RETURNING list_item_id;
             """, (space_id, user_id, item_name))
+            new_id = cur.fetchone()[0]
             conn.commit()
-            return True, "Item added to shopping list."
+            return True, {"id": new_id}
     except Exception as e:
         print("Error adding item to shopping list:", e)
-        return False, "An error occurred while adding the item."
+        return False, str(e)
     finally:
         conn.close()
         
@@ -379,3 +381,37 @@ def clear_shopping_list(space_id):
         return False, "An error occurred while clearing the shopping list."
     finally:
         conn.close()
+
+def get_product_info_from_barcode(barcode):
+    url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
+
+    try:
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data['status'] == 1:
+                product_info = data['product']
+                
+                # Extract product name
+                product_name = product_info.get('product_name_en', product_info.get('product_name', 'Name not found'))
+                
+                # Extract photo URL
+                image_url = product_info.get('image_front_url', 'Photo not found')
+                
+                # Extract quantity and unit
+                quantity = product_info.get('quantity', 'Quantity not found')
+                
+                return {
+                    "name": product_name,
+                    "photo": image_url,
+                    "quantity": quantity
+                }
+            else:
+                return {"error": "Product not found."}
+        else:
+            return {"error": f"API request failed. Status code: {response.status_code}"}
+
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Connection error: {e}"}
