@@ -321,7 +321,7 @@ def get_space_items(space_id):
             cur.execute("""
                 SELECT item_id, product_name, quantity, unit, barcode, image_url, expiration_date, added_by_user_id, barcode, image_url
                 FROM items
-                WHERE space_id = %s
+                WHERE space_id = %s and quantity > 0
             """, (space_id,))
             items = cur.fetchall()
             return [

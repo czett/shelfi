@@ -19,6 +19,9 @@ def index():
     if check_logged_in():
         return redirect('/dashboard')
     
+    # redirect to auth page if not logged in, as there is no landing page planned. this is NOT SaaS
+    return redirect('/login')
+    
     return render_template('index.html', session=session)
 
 @app.route('/login')
@@ -119,16 +122,20 @@ def view_space(space_id):
     if not database.is_user_in_space(session.get('user_id'), space_id):
         return redirect('/dashboard')
     
+    print("user in space")
+    
     space = database.get_space_details(space_id)
     
     session['current_space_id'] = space_id
+
+    print("space details")
     
     # get shopping list
     shopping_list = database.get_shopping_list(space_id)
     for item in shopping_list:
-        user_id = item.get('added_by_user_id')
+        # user_id = item.get('added_by_user_id')
         # Get username from user_id
-        item['username'] = database.get_username(user_id)
+        # item['username'] = database.get_username(user_id)
         
         if item.get('created_at'):
             try:
@@ -141,6 +148,8 @@ def view_space(space_id):
                 item['created_at'] = dt.strftime('%b %d, %Y')
             except Exception:
                 pass
+
+    print("shopping list")
 
     # get items in space
     items = database.get_space_items(space_id)
@@ -162,6 +171,8 @@ def view_space(space_id):
     num_expired = 0
     num_expiring_soon = 0
 
+    print("items")
+
     # determine items that expire soon or are expired
     for item in items:
         if item.get('expiration_date'):
@@ -176,6 +187,8 @@ def view_space(space_id):
                         num_expiring_soon += 1
             except Exception:
                 pass
+
+    print("expiration")
 
     return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
