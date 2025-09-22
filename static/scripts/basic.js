@@ -212,6 +212,8 @@ function addSpaceItemToDOM(item) {
     `;
 
     grid.appendChild(tile);
+
+    expandBigListForm();
 }
 
 function modifyItemAmount(e, itemID) {
@@ -252,6 +254,10 @@ function updateItemTileDOM(item) {
     const quantityInt = parseInt(item.quantity, 10);
 
     // hide element when quantity is 0 further along the line
+    if (quantityInt === 0) {
+        document.querySelector(`#item-tile-${item.id}`).style.display = "none";
+        return;
+    }
 
     tile.querySelector(".tile-info").textContent = `${quantityInt} ${item.unit}`;
 
