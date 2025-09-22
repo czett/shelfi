@@ -266,3 +266,13 @@ function updateItemTileDOM(item) {
         dateDiv.textContent = item.readable_expiration_date ? `expires ${item.readable_expiration_date}` : "no expiration date";
     }
 }
+
+function focusSpacesList(){
+    // highlight spaces list, .spaces-list for 1s, then remove class
+    document.querySelector('.spaces').classList.add('focus');
+    setTimeout(() => {
+        console.log('timeout');
+        document.querySelector('.spaces').classList.remove('focus');
+    }, 1000);
+    return;
+}

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Onest:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
 :root {
@@ -41,6 +42,7 @@
     box-sizing: border-box;
     font-family: 'Manrope';
     transition: 300ms;
+    /* font-family: 'Onest'; */
 }
 
 body, html{
@@ -150,6 +152,7 @@ div, p, a{
     padding: var(--ypad);
     border-radius: var(--radius-big);
     background-color: var(--light-bg);
+    transition: 300ms;
     position: relative !important;
 }
 
@@ -332,6 +335,10 @@ div, p, a{
 }
 
 /* spaces list, similar to messages */
+
+.focus{
+    filter: brightness(0.9) saturate(1.2);
+}
 
 .child .list-items{
     flex: 1;
