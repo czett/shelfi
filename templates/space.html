@@ -72,7 +72,7 @@
                 <a onmousedown="clearShoppingList()" class="btn btn-danger">Clear Completed Items</a>
             </div>
 
-            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm()">
+            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm('shopping-list-form')">
                 <div class="add-shopping-list-item-icon add-list-item-icon">
                     <span class="material-symbols-rounded">add</span>
                 </div>
@@ -107,7 +107,7 @@
             <div class="shopping-list-form list-form" data-expanded="false">
                 <form id="shopping-list-form" onsubmit="return addItem(event)">
                     <input type="text" id="item_name" name="item_name" required placeholder="Item Name">
-                    <button type="submit">Add to list</button>
+                    <button type="submit">Add</button>
                 </form>
             </div>
         </div>
