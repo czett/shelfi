@@ -1,4 +1,4 @@
-![banner where?](https://github.com/czett/go2klo/blob/main/static/img/banner.png)
+![banner where?](https://github.com/czett/shelfi/blob/main/static/img/banner.png)
 
 # shelfi 🥕
 ### Welcome to shelfi, your new digital refrigerator app for easy inventory management, smart shopping lists, and less food waste!
