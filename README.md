@@ -8,6 +8,7 @@ shelfi is a web app that helps you keep track of your groceries. Designed for us
 - Shopping List: Yes, a basic but essential feature.
 - Smart item monitoring: Get notifications when products are running low or about to expire.
 - Shared spaces: Organize and share your refrigerator with roommates.
+- Creating Invitation codes and joining spaces: Invite your friends to join your shared space.
 
 ## 🚧 Planned / soon-to-be:
 - Quick inventory tracking: Scan barcodes or receipts to quickly add food items.
