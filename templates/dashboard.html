@@ -5,11 +5,11 @@
 <div class="dashboard">
     <div class="row">
         <div class="child quick-actions">
-            <div class="quick-action">
+            <div class="quick-action" onmousedown="expandListForm('join-space-form')">
                 <div class="quick-action-icon">
-                    <span class="material-symbols-rounded">barcode_scanner</span>
+                    <span class="material-symbols-rounded">door_open</span>
                 </div>
-                <div class="quick-action-name">Scan</div>
+                <div class="quick-action-name" id="qa-join">Join Space</div>
             </div>
             <div class="quick-action" onmousedown="focusSpacesList()">
                 <div class="quick-action-icon">
@@ -17,17 +17,35 @@
                 </div>
                 <div class="quick-action-name">New Item</div>
             </div>
-            <div class="quick-action" onmousedown="expandListForm()">
+            <div class="quick-action" onmousedown="expandListForm('create-space-form')">
                 <div class="quick-action-icon">
                     <span class="material-symbols-rounded">soup_kitchen</span>
                 </div>
                 <div class="quick-action-name">New Space</div>
             </div>
-            <div class="quick-action">
+            <div class="quick-action" onmousedown="expandListForm('create-invite-form')">
                 <div class="quick-action-icon">
                     <span class="material-symbols-rounded">group</span>
                 </div>
-                <div class="quick-action-name">Sharing</div>
+                <div class="quick-action-name" id="qa-invite">Invite</div>
+            </div>
+
+            <div class="join-space-form list-form" data-expanded="false">
+                <form id="join-space-form">
+                    <input type="text" id="invitation_code" name="invitation_code" required placeholder="Invitation Code">
+                    <button type="submit">Join</button>
+                </form>
+            </div>
+
+            <div class="create-invite-form list-form" data-expanded="false">
+                <form id="create-invite-form">
+                    <select name="space" id="space">
+                        {% for space in spaces %}
+                            <option value="{{space.id}}">{{space.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Create</button>
+                </form>
             </div>
         </div>
         
@@ -57,7 +75,7 @@
                 Overview of your kitchen spaces
             </div>
 
-            <div class="create-space-button add-list-item-button" onmousedown="expandListForm()">
+            <div class="create-space-button add-list-item-button" onmousedown="expandListForm('create-space-form')">
                 <div class="create-space-icon add-list-item-icon">
                     <span class="material-symbols-rounded">add</span>
                 </div>

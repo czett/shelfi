@@ -162,6 +162,7 @@ div, p, a{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+    user-select: none;
 }
 
 .child.quick-actions .quick-action{
@@ -434,6 +435,10 @@ div, p, a{
     padding: 1rem;
 }
 
+.quick-actions .list-form{
+    width: 80%;
+}
+
 .list-form form{
     width: 100%;
     display: flex;
@@ -660,6 +665,12 @@ div, p, a{
 
 .space-overview a.btn:hover{
     filter: brightness(1.1);
+}
+
+.overview .message a.copy-btn{
+    text-decoration: underline !important;
+    font-weight: 800;
+    cursor: pointer;
 }
 
 /* shopping list in space view */
