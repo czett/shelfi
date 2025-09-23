@@ -98,7 +98,18 @@
 
                             <div class="item-card-name list-item-name">{{item.product_name}}</div>
                         </div>
+                        {% if item.smart_add %}
+                        <div class="item-card-info list-item-info smart-add-info">
+                            <div class="smart-add-icon-wrap">    
+                                <span class="material-symbols-rounded">bolt</span>
+                            </div>
+                            <div class="smart-add-info-text">
+                                added smartly
+                            </div>
+                        </div>
+                        {% else %}
                         <div class="item-card-info list-item-info">added <!--by <span style="font-weight: 700;">@{{item.username}}</span>-->on {{item.created_at}}</div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}

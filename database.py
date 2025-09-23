@@ -249,7 +249,7 @@ def get_shopping_list(space_id):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked, visible
+                SELECT list_item_id, space_id, product_name, added_by_user_id, created_at, checked, visible, smart_add
                 FROM shopping_list
                 WHERE space_id = %s
                 ORDER BY checked, created_at DESC
@@ -263,7 +263,8 @@ def get_shopping_list(space_id):
                     'added_by_user_id': row[3],
                     'created_at': row[4],
                     'checked': row[5],
-                    'visible': row[6]
+                    'visible': row[6],
+                    'smart_add': row[7]
                 }
                 for row in items
             ]
@@ -533,3 +534,26 @@ def handle_invitation(user_id, invitation_code):
         return success, message, None
     
     return True, "Invitation successful.", {"invitation_id": invitation_id, "space_id": space_id}
+
+def smart_add_shopping_list(space_id, user_id, item_name):
+    # perform a normal item insertion to shopping list table, however mark attribute smart_add as true
+    conn = get_db_connection()
+
+    if not conn:
+        return False, "Database connection failed.", None
+    
+    with conn.cursor() as cur:
+        try:
+            cur.execute("""
+                INSERT INTO shopping_list (space_id, added_by_user_id, product_name, smart_add)
+                VALUES (%s, %s, %s, true)
+                RETURNING list_item_id;
+            """, (space_id, user_id, item_name))
+            new_id = cur.fetchone()[0]
+            conn.commit()
+            return True, "Item added to shopping list.", new_id
+        except Exception as e:
+            print("Error adding item to shopping list:", e)
+            return False, str(e)
+        finally:
+            conn.close()
