@@ -862,7 +862,7 @@ div, p, a{
     }
 
     .list-form{
-        width: 100%;
+        width: 100% !important;
     }
 
     .shopping-list .item-card-info{
