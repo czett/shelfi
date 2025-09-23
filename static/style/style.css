@@ -667,6 +667,12 @@ div, p, a{
     filter: brightness(1.1);
 }
 
+.overview .message a.copy-btn{
+    text-decoration: underline !important;
+    font-weight: 800;
+    cursor: pointer;
+}
+
 /* shopping list in space view */
 
 .space-shopping-list{

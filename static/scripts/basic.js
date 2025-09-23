@@ -1,4 +1,10 @@
+let formLocked = false;
+
 function expandListForm(cssClass) {
+    if (formLocked){
+        return;
+    }
+
     // const button = document.querySelector('.create-space-button');
     const form = document.querySelector('.' + cssClass);
 
@@ -13,6 +19,10 @@ function expandListForm(cssClass) {
 }
 
 function expandBigListForm(){
+    if (formLocked){
+        return;
+    }
+
     const form = document.querySelector('.big-list-form');
     
     if (form.getAttribute('data-expanded') === 'false') {
@@ -93,6 +103,8 @@ function addItem(e) {
   const itemName = input.value.trim();
   if (!itemName) return false;
 
+  formLocked = true;
+
   fetch("/api/add-item-to-shopping-list", {
     method: "POST",
     headers: {
@@ -110,9 +122,10 @@ function addItem(e) {
       console.error("Error:", data.message);
     }
   })
-  .catch(err => console.error("Request failed", err));
-
-  return false;
+  .catch(err => console.error("Request failed", err))
+  .finally(() => {
+    formLocked = false;
+  });
 }
 
 function addShoppingListItemToDOM(item) {
@@ -151,6 +164,8 @@ function addItemToSpace(e) {
 
     if (!name || !amount || !unit) return false;
 
+    formLocked = true;
+
     fetch("/api/add-to-space-list", {
         method: "POST",
         headers: {
@@ -177,9 +192,8 @@ function addItemToSpace(e) {
             console.error("Error:", data.message);
         }
     })
-    .catch(err => console.error("Request failed", err));
-
-    return false;
+    .catch(err => console.error("Request failed", err))
+    .finally(() => formLocked = false);
 }
 
 function addSpaceItemToDOM(item) {
@@ -223,6 +237,8 @@ function modifyItemAmount(e, itemID) {
     const newAmount = Number(input.value);
     if (isNaN(newAmount) || newAmount < 0) return false;
 
+    formLocked = true;
+
     fetch(`/api/modify-item-amount/${itemID}`, {
         method: "POST",
         headers: {
@@ -239,11 +255,8 @@ function modifyItemAmount(e, itemID) {
             console.error("Modify failed:", data.message);
         }
     })
-    .catch(err => console.error("Request failed", err));
-
-    expandModifyOverlay(itemID);
-
-    return false;
+    .catch(err => console.error("Request failed", err))
+    .finally(() => formLocked = false);
 }
 
 function updateItemTileDOM(item) {
@@ -279,6 +292,7 @@ function focusSpacesList(){
 
 function openInviteMenu(){
     // request api/create-invitation with deault space id of 2 for testing
+    formLocked = true;
     fetch('/api/create-invitation', {
         method: 'POST',
         headers: {
@@ -293,13 +307,17 @@ function openInviteMenu(){
     .then(data => {
         console.log(data);
     })
-    .catch(err => console.error('Request failed', err));
-    return;
+    .catch(err => console.error('Request failed', err))
+    .finally(() => formLocked = false);
 }
 
 document.getElementById("create-invite-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const spaceId = document.getElementById("space").value;
+
+    expandListForm('create-invite-form');
+    formLocked = true;
+    document.getElementById("qa-invite").innerHTML = "Creating Invite...";
 
     fetch("/api/create-invitation", {
         method: "POST",
@@ -317,7 +335,11 @@ document.getElementById("create-invite-form").addEventListener("submit", functio
             alert("Error: " + data.message);
         }
     })
-    .catch(err => console.error("Request failed", err));
+    .catch(err => console.error("Request failed", err))
+    .finally(() => {
+        formLocked = false;
+        document.getElementById("qa-invite").innerHTML = "Invite";
+    });
 });
 
 function addInviteMessage(code, spaceId) {
@@ -332,12 +354,12 @@ function addInviteMessage(code, spaceId) {
     msg.classList.add("message", "info");
     msg.innerHTML = `
         <div class="message-icon">
-            <span class="material-symbols-rounded">group</span>
+            <span class="material-symbols-rounded">mail_shield</span>
         </div>
         <div class="message-text">
-            Invite for space <strong>${spaceId}</strong>: 
+            Invite created. Code to share: 
             <code>${code}</code>
-            <button class="copy-btn">Copy</button>
+            <a class="copy-btn">(Copy Code)</a>
         </div>
     `;
 
@@ -345,9 +367,9 @@ function addInviteMessage(code, spaceId) {
     msg.querySelector(".copy-btn").addEventListener("click", () => {
         navigator.clipboard.writeText(code)
             .then(() => {
-                msg.querySelector(".copy-btn").textContent = "Copied!";
+                msg.querySelector(".copy-btn").textContent = "(Copied!)";
                 setTimeout(() => {
-                    msg.querySelector(".copy-btn").textContent = "Copy";
+                    msg.querySelector(".copy-btn").textContent = "(Copy)";
                 }, 1500);
             })
             .catch(err => console.error("Clipboard error:", err));
@@ -361,6 +383,10 @@ function addInviteMessage(code, spaceId) {
 document.getElementById("join-space-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const code = document.getElementById("invitation_code").value.trim();
+
+    expandListForm('join-space-form');
+    formLocked = true;
+    document.getElementById("qa-join").innerHTML = "Joining...";
 
     fetch("/api/handle-invitation", {
         method: "POST",
@@ -379,5 +405,9 @@ document.getElementById("join-space-form").addEventListener("submit", function(e
             alert("Error: " + data.message);
         }
     })
-    .catch(err => console.error("Request failed", err));
+    .catch(err => console.error("Request failed", err))
+    .finally(() => {
+        formLocked = false;
+        document.getElementById("qa-join").innerHTML = "Join Space";
+    });
 });
