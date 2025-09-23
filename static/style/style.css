@@ -858,9 +858,10 @@ div, p, a{
         min-width: 100% !important;
         flex: 0 !important;
         min-height: 35dvh;
+        overflow: hidden;
     }
 
-    .quick-actions .list-form{
+    .list-form{
         width: 100%;
     }
 
