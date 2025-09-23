@@ -1,6 +1,7 @@
 import psycopg
 import dotenv, os, requests
 import bcrypt
+import random, string
 from datetime import datetime
 
 try:
@@ -445,3 +446,90 @@ def get_product_info_from_barcode(barcode):
 
     except requests.exceptions.RequestException as e:
         return {"error": f"Connection error: {e}"}
+    
+def create_invitation_code(user_id, space_id):
+    # Generate a random string of letters and digits
+    code = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO invitations (created_by_user_id, space_id, invitation_code)
+                VALUES (%s, %s, %s)
+                RETURNING invitation_id, invitation_code;
+            """, (user_id, space_id, code))
+            new_id, new_code = cur.fetchone()
+            conn.commit()
+            return True, "Invitation created.", (new_id, new_code)
+    except Exception as e:
+        print("Error creating invitation:", e)
+        return False, "An error occurred while creating the invitation.", None
+    finally:
+        conn.close()
+
+def add_user_to_space(user_id, space_id):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed."
+    
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO user_spaces (user_id, space_id, role)
+            VALUES (%s, %s, 'member')
+            ON CONFLICT DO NOTHING;
+            """, (user_id, space_id))
+        conn.commit()
+        return True, "User added to space.", None
+    except Exception as e:
+        print("Error adding user to space:", e)
+        return False, "An error occurred while adding the user to the space.", None
+    finally:
+        conn.close()
+
+def check_invitation_code(code):
+    conn = get_db_connection()
+    if conn is None:
+        return False, "Database connection failed.", None
+    
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT invitation_id, space_id
+                FROM invitations
+                WHERE invitation_code = %s
+            """, (code,))
+            result = cur.fetchone()
+            if result:
+                return True, "Invitation code is valid.", {
+                    "invitation_id": result[0],
+                    "space_id": result[1]
+                }
+            else:
+                return False, "Invitation code is invalid.", None
+    except Exception as e:
+        print("Error checking invitation code:", e)
+        return False, "An error occurred while checking the invitation code.", None
+    finally:
+        conn.close()
+
+
+def handle_invitation(user_id, invitation_code):
+    if not user_id or not invitation_code:
+        return False, "Invalid input.", None
+    
+    success, message, result = check_invitation_code(invitation_code)
+    if not success:
+        return success, message, None
+    
+    invitation_id = result["invitation_id"]
+    space_id = result["space_id"]
+
+    success, message, _ = add_user_to_space(user_id, space_id)
+    if not success:
+        return success, message, None
+    
+    return True, "Invitation successful.", {"invitation_id": invitation_id, "space_id": space_id}

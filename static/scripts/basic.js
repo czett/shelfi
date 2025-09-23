@@ -1,6 +1,6 @@
-function expandListForm() {
+function expandListForm(cssClass) {
     // const button = document.querySelector('.create-space-button');
-    const form = document.querySelector('.list-form');
+    const form = document.querySelector('.' + cssClass);
 
     
     if (form.getAttribute('data-expanded') === 'false') {
@@ -276,3 +276,108 @@ function focusSpacesList(){
     }, 1000);
     return;
 }
+
+function openInviteMenu(){
+    // request api/create-invitation with deault space id of 2 for testing
+    fetch('/api/create-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            space_id: 2
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(err => console.error('Request failed', err));
+    return;
+}
+
+document.getElementById("create-invite-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const spaceId = document.getElementById("space").value;
+
+    fetch("/api/create-invitation", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({ space_id: spaceId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            addInviteMessage(data.invitation.code, spaceId);
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(err => console.error("Request failed", err));
+});
+
+function addInviteMessage(code, spaceId) {
+    const overview = document.querySelector(".child.overview");
+
+    // die "no messages" Info ausblenden
+    const noMsg = overview.querySelector(".no-messages-text");
+    if (noMsg) noMsg.style.display = "none";
+
+    // neues Message Element
+    const msg = document.createElement("div");
+    msg.classList.add("message", "info");
+    msg.innerHTML = `
+        <div class="message-icon">
+            <span class="material-symbols-rounded">group</span>
+        </div>
+        <div class="message-text">
+            Invite for space <strong>${spaceId}</strong>: 
+            <code>${code}</code>
+            <button class="copy-btn">Copy</button>
+        </div>
+    `;
+
+    // copy handler
+    msg.querySelector(".copy-btn").addEventListener("click", () => {
+        navigator.clipboard.writeText(code)
+            .then(() => {
+                msg.querySelector(".copy-btn").textContent = "Copied!";
+                setTimeout(() => {
+                    msg.querySelector(".copy-btn").textContent = "Copy";
+                }, 1500);
+            })
+            .catch(err => console.error("Clipboard error:", err));
+    });
+
+    // ganz oben einfügen
+    overview.prepend(msg);
+}
+
+// join space via invite
+document.getElementById("join-space-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const code = document.getElementById("invitation_code").value.trim();
+
+    fetch("/api/handle-invitation", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({ invitation_code: code })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Joined space successfully!");
+            location.reload();
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(err => console.error("Request failed", err));
+});

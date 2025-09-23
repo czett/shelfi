@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, session, request, jsonify
-import database, dotenv, os, re
+import database, dotenv, os, re, random, string
 from datetime import datetime
 
 try:
@@ -122,13 +122,9 @@ def view_space(space_id):
     if not database.is_user_in_space(session.get('user_id'), space_id):
         return redirect('/dashboard')
     
-    print("user in space")
-    
     space = database.get_space_details(space_id)
     
     session['current_space_id'] = space_id
-
-    print("space details")
     
     # get shopping list
     shopping_list = database.get_shopping_list(space_id)
@@ -148,8 +144,6 @@ def view_space(space_id):
                 item['created_at'] = dt.strftime('%b %d, %Y')
             except Exception:
                 pass
-
-    print("shopping list")
 
     # get items in space
     items = database.get_space_items(space_id)
@@ -171,8 +165,6 @@ def view_space(space_id):
     num_expired = 0
     num_expiring_soon = 0
 
-    print("items")
-
     # determine items that expire soon or are expired
     for item in items:
         if item.get('expiration_date'):
@@ -187,8 +179,6 @@ def view_space(space_id):
                         num_expiring_soon += 1
             except Exception:
                 pass
-
-    print("expiration")
 
     return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
@@ -364,6 +354,54 @@ def add_item_to_shopping_list():
         })
     else:
         return jsonify({"success": False, "message": result}), 500
+
+@app.route("/api/create-invitation", methods=['POST'])
+def create_invitation():
+    if not check_logged_in():
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
+    
+    # fetch user_id from session, so logged in user
+    # fetch space id from json query as one user might be in multiple spaces and only wants to create an invite for one
+    data = request.get_json()
+    user_id = session.get('user_id')
+    space_id = data.get("space_id")
+
+    if not space_id or not user_id or not data:
+        return jsonify({"success": False, "message": "Invalid input."}), 400
+
+    success, message, result = database.create_invitation_code(user_id, space_id)
+    if success:
+        return jsonify({
+            "success": True,
+            "invitation": {
+                "id": result[0],
+                "code": result[1]
+            }
+        })
+    else:
+        return jsonify({"success": False, "message": message})
+
+@app.route("/api/handle-invitation", methods=['POST'])
+def handle_invitation_route():
+    if not check_logged_in():
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
+    
+    data = request.get_json()
+    user_id = session.get('user_id')
+    invitation_code = data.get("invitation_code")
+    
+    if not invitation_code or not user_id:
+        return jsonify({"success": False, "message": "Invalid input."}), 400
+    
+    success, message, result = database.handle_invitation(user_id, invitation_code)
+
+    if success:
+        return jsonify({
+            "success": True,
+            "invitation": result
+        })
+    else:
+        return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
