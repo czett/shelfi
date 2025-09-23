@@ -116,7 +116,7 @@ function addItem(e) {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      addShoppingListItemToDOM(data.item);
+      addShoppingListItemToDOM(data.item, false);
       input.value = "";
     } else {
       console.error("Error:", data.message);
@@ -128,31 +128,44 @@ function addItem(e) {
   });
 }
 
-function addShoppingListItemToDOM(item) {
+function addShoppingListItemToDOM(item, smart_add) {
   const list = document.querySelector(".shopping-list");
   const card = document.createElement("div");
   card.classList.add("item-card", "list-item-card");
   card.id = `shopping-list-item-${item.list_item_id}`;
 
-  card.innerHTML = `
-    <div class="space-icon-and-name list-item-main">
-      <a class="item-card-checkbox list-item-icon"
-         id="item-card-checkbox-${item.list_item_id}"
-         data-checked="false"
-         onmousedown="checkShoppingListItem(${item.list_item_id})">
-        <div class="item-card-checkbox-filling"></div>
-      </a>
-      <div class="item-card-name list-item-name">${item.product_name}</div>
-    </div>
-    <div class="item-card-info list-item-info smart-add-info">
-        <div class="smart-add-icon-wrap">    
-            <span class="material-symbols-rounded">bolt</span>
+  if (smart_add) {
+    card.innerHTML = `
+        <div class="space-icon-and-name list-item-main">
+        <a class="item-card-checkbox list-item-icon"
+            id="item-card-checkbox-${item.list_item_id}"
+            data-checked="false"
+            onmousedown="checkShoppingListItem(${item.list_item_id})">
+            <div class="item-card-checkbox-filling"></div>
+        </a>
+        <div class="item-card-name list-item-name">${item.product_name}</div>
         </div>
-        <div class="smart-add-info-text">
-            added smartly
+        <div class="item-card-info list-item-info smart-add-info">
+            <div class="smart-add-icon-wrap">    
+                <span class="material-symbols-rounded">bolt</span>
+            </div>
+            <div class="smart-add-info-text">
+                added smartly
+            </div>
         </div>
-    </div>
-  `;
+    `;
+  } else {
+    card.innerHTML = `<div class="space-icon-and-name list-item-main">
+        <a class="item-card-checkbox list-item-icon"
+            id="item-card-checkbox-${item.list_item_id}"
+            data-checked="false"
+            onmousedown="checkShoppingListItem(${item.list_item_id})">
+            <div class="item-card-checkbox-filling"></div>
+        </a>
+        <div class="item-card-name list-item-name">${item.product_name}</div>
+        </div>
+        <div class="item-card-info list-item-info">added now</div>`;
+  }
 
   list.appendChild(card);
 
@@ -287,7 +300,7 @@ function updateItemTileDOM(item) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                addShoppingListItemToDOM(data.item);
+                addShoppingListItemToDOM(data.item, true);
             } else {
                 console.error("Failed to add to shopping list:", data.message);
             }
