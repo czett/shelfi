@@ -402,6 +402,33 @@ def handle_invitation_route():
         })
     else:
         return jsonify({"success": False, "message": message})
+    
+@app.route('/api/smart-add-shopping-list', methods=['POST'])
+def smart_add_shopping_list_route():
+    if not check_logged_in():
+        return jsonify({"success": False, "message": "You are not logged in."}), 401
+    
+    data = request.get_json()
+    item_name = data.get("item_name", "").strip().capitalize()
+    space_id = session.get('current_space_id')
+    user_id = session.get('user_id')
+
+    if not space_id or not item_name or len(item_name) > 100:
+        return jsonify({"success": False, "message": "Invalid input."}), 400
+    
+    success, message, new_item_id = database.smart_add_shopping_list(space_id, user_id, item_name)
+
+    if success:
+        return jsonify({
+            "success": True,
+            "item": {
+                "list_item_id": new_item_id,
+                "product_name": item_name,
+                "created_at": datetime.now().strftime("%b %d, %Y")
+            }
+        })
+    else:
+        return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=False, port=8080)

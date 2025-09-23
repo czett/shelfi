@@ -86,7 +86,7 @@ div, p, a{
 
 .navbar a.logo-text{
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: 900;
 }
 
 .navbar-right {
@@ -391,6 +391,12 @@ div, p, a{
 .list-item-main div{
     font-size: 1.25rem;
     font-weight: 700;
+}
+
+.list-item-info{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* create space floating button */
@@ -713,6 +719,28 @@ div, p, a{
     border-radius: .3rem;
 }
 
+.item-card-info .smart-add-icon-wrap{
+    aspect-ratio: 1;
+    width: 1.9rem;
+    /* background-color: var(--fg-color); */
+    border-radius: .35rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-card-info .smart-add-icon-wrap span{
+    background: linear-gradient(45deg, var(--blue), var(--yellow), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.smart-add-info{
+    font-weight: 800;
+}
+
 .checked-list-item{
     opacity: 0.5;
 }
@@ -917,5 +945,17 @@ div, p, a{
         flex-direction: column;
         align-items: start !important;
         gap: .5rem;
+    }
+
+    .item-card{
+        flex-direction: row !important;
+    }
+
+    .item-card-info:not(.smart-add-info){
+        display: none;
+    }
+
+    .smart-add-info-text{
+        display: none;
     }
 }

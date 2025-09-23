@@ -144,8 +144,13 @@ function addShoppingListItemToDOM(item) {
       </a>
       <div class="item-card-name list-item-name">${item.product_name}</div>
     </div>
-    <div class="item-card-info list-item-info">
-      added by <span style="font-weight: 700;">@${item.username}</span> on ${item.created_at}
+    <div class="item-card-info list-item-info smart-add-info">
+        <div class="smart-add-icon-wrap">    
+            <span class="material-symbols-rounded">bolt</span>
+        </div>
+        <div class="smart-add-info-text">
+            added smartly
+        </div>
     </div>
   `;
 
@@ -263,12 +268,32 @@ function updateItemTileDOM(item) {
     const tile = document.querySelector(`.item-tile .tile-content[onmousedown*="expandModifyOverlay(${item.id})"]`);
     if (!tile) return;
 
-    // quantity as Integer
     const quantityInt = parseInt(item.quantity, 10);
 
-    // hide element when quantity is 0 further along the line
     if (quantityInt === 0) {
-        document.querySelector(`#item-tile-${item.id}`).style.display = "none";
+        // hide element
+        const tileElement = tile.closest('.item-tile');
+        if (tileElement) tileElement.style.display = "none";
+
+        // add to shopping list automatically
+        fetch('/api/smart-add-shopping-list', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ item_name: item.name })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                addShoppingListItemToDOM(data.item);
+            } else {
+                console.error("Failed to add to shopping list:", data.message);
+            }
+        })
+        .catch(err => console.error("Request failed", err));
+
         return;
     }
 
