@@ -1,8 +1,5 @@
 let formLocked = false;
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function expandListForm(cssClass, scrollClass=null){
     if (formLocked){
@@ -17,9 +14,9 @@ function expandListForm(cssClass, scrollClass=null){
         form.style.transform = "translate(50%, 0%)";
         form.setAttribute('data-expanded', 'true');
 
-        // scroll to bottom of element with id scrollID
-        if (scrollID) {
-            const scrollElement = document.querySelector('#' + scrollID);
+        // scroll to bottom of element with id scrollClass
+        if (scrollClass) {
+            const scrollElement = document.querySelector('#' + scrollClass);
             scrollElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     } else {
