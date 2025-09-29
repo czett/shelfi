@@ -6,7 +6,7 @@
     --fg-color: #000000;
     --light-text: #999999;
     --light-border: #e2e2e2;
-    --light-bg: #f8f8f8;
+    --light-bg: #f4f4f4;
     --lines: #cccccc;
 
     /* Light-Töne etwas kräftiger, aber immer noch sanft */
@@ -799,6 +799,17 @@ div, p, a{
     display: flex;
     justify-content: center;
     align-items: center;
+    aspect-ratio: 1;
+    width: 50%;
+    border-radius: 1rem;
+    background-color: var(--light-bg);
+    overflow: hidden;
+}
+
+.tile-icon img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .tile .tile-icon span{

@@ -147,7 +147,11 @@
                 <div class="tile item-tile" id="item-tile-{{item.id}}">
                     <div class="tile-content" onmousedown="expandModifyOverlay({{item.id}})">
                         <div class="tile-icon">
-                            <span class="material-symbols-rounded">grocery</span>
+                            {% if item.image_url %}
+                                <img src="{{item.image_url}}" alt="item image">
+                            {% else %}
+                                <span class="material-symbols-rounded">grocery</span>
+                            {% endif %}
                         </div>
                         <div class="tile-name">
                             {{item.name}}

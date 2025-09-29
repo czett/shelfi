@@ -245,9 +245,14 @@ def add_item_to_space_list():
     if not space_id or not item_name or not amount or not unit or len(item_name) > 100:
         return jsonify({"success": False, "message": "Invalid input."}), 400
 
+    # try and find image url
+    image_url = None
+    if item_name:
+        image_url = database.get_product_image_url(item_name)
+
     # DB-Funktion gibt jetzt direkt die neue ID zurück
     success, message, new_id = database.add_item_to_space_list(
-        space_id, user_id, item_name, expiration_date, amount, unit
+        space_id, user_id, item_name, expiration_date, amount, unit, image_url
     )
 
     if success:
