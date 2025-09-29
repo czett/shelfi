@@ -1,6 +1,10 @@
 let formLocked = false;
 
-function expandListForm(cssClass) {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function expandListForm(cssClass, scrollClass=null){
     if (formLocked){
         return;
     }
@@ -12,13 +16,19 @@ function expandListForm(cssClass) {
     if (form.getAttribute('data-expanded') === 'false') {
         form.style.transform = "translate(50%, 0%)";
         form.setAttribute('data-expanded', 'true');
+
+        // scroll to bottom of element with id scrollID
+        if (scrollID) {
+            const scrollElement = document.querySelector('#' + scrollID);
+            scrollElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
     } else {
         form.style.transform = "translate(50%, 100%)";
         form.setAttribute('data-expanded', 'false');
     }
 }
 
-function expandBigListForm(){
+function expandBigListForm(scrollID=null){
     if (formLocked){
         return;
     }
@@ -28,6 +38,12 @@ function expandBigListForm(){
     if (form.getAttribute('data-expanded') === 'false') {
         form.style.transform = "translate(50%, 0%)";
         form.setAttribute('data-expanded', 'true');
+
+        // scroll to bottom of element with id scrollID
+        if (scrollID) {
+            const scrollElement = document.querySelector('#' + scrollID);
+            scrollElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
     } else {
         form.style.transform = "translate(50%, 100%)";
         form.setAttribute('data-expanded', 'false');

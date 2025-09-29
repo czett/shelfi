@@ -72,7 +72,7 @@
                 <a onmousedown="clearShoppingList()" class="btn btn-danger">Clear Completed Items</a>
             </div>
 
-            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm('shopping-list-form')">
+            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandListForm('shopping-list-form', 'shopping-list-scroll-helper')">
                 <div class="add-shopping-list-item-icon add-list-item-icon">
                     <span class="material-symbols-rounded">add</span>
                 </div>
@@ -121,6 +121,8 @@
                     <button type="submit">Add</button>
                 </form>
             </div>
+            
+            <div class="scroll-helper" id="shopping-list-scroll-helper"></div>
         </div>
     </div>
 
@@ -135,7 +137,7 @@
                 Items in this space
             </div>
 
-            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandBigListForm()">
+            <div class="add-shopping-list-item-button add-list-item-button" onmousedown="expandBigListForm('add-item-scroll-helper')">
                 <div class="add-shopping-list-item-icon add-list-item-icon">
                     <span class="material-symbols-rounded">add</span>
                 </div>
@@ -186,7 +188,7 @@
                 {% endfor %}
             </div>
 
-            <div class="shopping-list-form list-form big-list-form" data-expanded="false">
+            <div class="shopping-list-form list-form add-item-form big-list-form" data-expanded="false">
                 <form id="space-item-form" onsubmit="return addItemToSpace(event)">
                     <input type="text" id="space_item_name" required placeholder="Item Name">
                     <label for="expiration_date" class="helper-label">Expiration Date (optional):</label>
@@ -196,18 +198,26 @@
                     <input type="number" id="amount" required placeholder="Amount">
                     <select id="unit" required>
                         <option value="Unit" disabled selected>Unit</option>
+                        <!-- weight -->
                         <option value="kg">kg</option>
                         <option value="g">g</option>
+                        <!-- volume -->
                         <option value="ml">ml</option>
                         <option value="l">l</option>
                         <option value="pcs">pcs</option>
                         <option value="cups">cups</option>
+                        <!-- packaging -->
+                        <option value="can">can</option>
+                        <option value="bottle">bottle</option>
+                        <option value="box">box</option>
                     </select>
                     </div>
 
                     <button type="submit">Add item to space</button>
                 </form>
             </div>
+
+            <div class="scroll-helper" id="add-item-scroll-helper"></div>
         </div>
     </div>
 </div>
