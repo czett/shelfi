@@ -11,13 +11,14 @@ shelfi is a web app that helps you keep track of your groceries. Designed for us
 - Smart item monitoring: Get notifications when products are running low or about to expire.
 - Shared spaces: Organize and share your refrigerator with roommates.
 - Creating Invitation codes and joining spaces: Invite your friends to join your shared space.
+- Auto Updating Shopping List: The name says it all, really.
 
 ## 🚧 Planned / soon-to-be:
 - Quick inventory tracking: Scan barcodes or receipts to quickly add food items.
-- Auto Updating Shopping List: The name says it all, really.
+- Recipes: Find recipes based on your current inventory.
 
 ## 📝 Tech Stack
-- Frontend: Vanilla :3
+- Frontend: Vanilla
 - Backend: Python Flask
 - Database: PostgreSQL on neon
 - APIs: Open Food Facts (soon, for product data)

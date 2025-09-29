@@ -169,7 +169,8 @@ function addShoppingListItemToDOM(item, smart_add) {
 
   list.appendChild(card);
 
-  expandListForm();
+  formLocked = false;
+  expandListForm('shopping-list-form');
 }
 
 function addItemToSpace(e) {
@@ -245,6 +246,7 @@ function addSpaceItemToDOM(item) {
 
     grid.appendChild(tile);
 
+    formLocked = false;
     expandBigListForm();
 }
 
@@ -275,6 +277,9 @@ function modifyItemAmount(e, itemID) {
     })
     .catch(err => console.error("Request failed", err))
     .finally(() => formLocked = false);
+
+    formLocked = false;
+    expandModifyOverlay(itemID);
 }
 
 function updateItemTileDOM(item) {

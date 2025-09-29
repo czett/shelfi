@@ -14,6 +14,10 @@ app.secret_key = os.getenv("SECRET_KEY")
 def check_logged_in():
     return session.get('logged_in', False)
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
 @app.route('/')
 def index():
     if check_logged_in():
@@ -431,4 +435,4 @@ def smart_add_shopping_list_route():
         return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8080)
+    app.run(debug=True, port=8080)
