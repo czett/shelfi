@@ -169,7 +169,11 @@ function addShoppingListItemToDOM(item, smart_add) {
 
   list.appendChild(card);
 
-  expandListForm();
+  formLocked = false;
+
+  if (!smart_add) {
+    expandListForm('shopping-list-form');
+  }
 }
 
 function addItemToSpace(e) {
@@ -226,11 +230,13 @@ function addSpaceItemToDOM(item) {
           <span class="material-symbols-rounded">grocery</span>
         </div>
         <div class="tile-name">${item.name}</div>
-        <div class="tile-date">
-          ${item.readable_expiration_date ? "expires " + item.readable_expiration_date : "no expiration date"}
-        </div>
         <div class="tile-info">
-          ${item.quantity} ${item.unit}
+          <div class="tile-info-tag important-tag">
+            ${item.readable_expiration_date ? "exp. " + item.readable_expiration_date : "exp. unset"}
+          </div>
+          <div class="tile-info-tag semi-important-tag">
+            ${item.quantity} ${item.unit}
+          </div>
         </div>
       </div>
 
@@ -245,6 +251,7 @@ function addSpaceItemToDOM(item) {
 
     grid.appendChild(tile);
 
+    formLocked = false;
     expandBigListForm();
 }
 
@@ -275,6 +282,9 @@ function modifyItemAmount(e, itemID) {
     })
     .catch(err => console.error("Request failed", err))
     .finally(() => formLocked = false);
+
+    formLocked = false;
+    expandModifyOverlay(itemID);
 }
 
 function updateItemTileDOM(item) {
@@ -310,12 +320,13 @@ function updateItemTileDOM(item) {
         return;
     }
 
-    tile.querySelector(".tile-info").textContent = `${quantityInt} ${item.unit}`;
+    tile.querySelector(".amount-info-tag").textContent = `${quantityInt} ${item.unit}`;
 
-    const dateDiv = tile.querySelector(".tile-date");
+    /*const dateDiv = tile.querySelector(".tile-date");
     if (dateDiv) {
+
         dateDiv.textContent = item.readable_expiration_date ? `expires ${item.readable_expiration_date}` : "no expiration date";
-    }
+    }*/
 }
 
 function focusSpacesList(){

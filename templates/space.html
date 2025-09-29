@@ -147,20 +147,31 @@
                 <div class="tile item-tile" id="item-tile-{{item.id}}">
                     <div class="tile-content" onmousedown="expandModifyOverlay({{item.id}})">
                         <div class="tile-icon">
-                            <span class="material-symbols-rounded">grocery</span>
+                            {% if item.image_url %}
+                                <img src="{{item.image_url}}" alt="item image">
+                            {% else %}
+                                <span class="material-symbols-rounded">grocery</span>
+                            {% endif %}
                         </div>
                         <div class="tile-name">
                             {{item.name}}
                         </div>
                         <div class="tile-date">
-                        {% if item.readable_expiration_date %}
-                            expires {{item.readable_expiration_date}}
-                        {% else %}
-                            no expiration date
-                        {% endif %}
+                        
                         </div>
                         <div class="tile-info">
-                            {{item.quantity}} {{item.unit}}
+                            {% if item.readable_expiration_date %}
+                                <div class="tile-info-tag important-tag">
+                                    exp. {{item.readable_expiration_date}}
+                                </div>
+                            {% else %}
+                                <div class="tile-info-tag unimportant-tag">
+                                    exp. unset
+                                </div>
+                            {% endif %}
+                            <div class="tile-info-tag amount-info-tag semi-important-tag">
+                                {{item.quantity}} {{item.unit}}
+                            </div>
                         </div>
                     </div>
 

@@ -293,17 +293,37 @@ def toggle_shopping_list_item(list_item_id):
     finally:
         conn.close()
 
-def add_item_to_space_list(space_id, user_id, item_name, expiration_date, amount, unit):
+def get_product_image_url(query: str) -> str | None:
+    url = "https://world.openfoodfacts.org/cgi/search.pl"
+    params = {
+        "search_terms": query,
+        "search_simple": 1,
+        "action": "process",
+        "json": 1,
+        "page_size": 1  # first result
+    }
+    r = requests.get(url, params=params, timeout=10)
+    r.raise_for_status()
+    data = r.json()
+
+    products = data.get("products", [])
+    if not products:
+        return None
+
+    product = products[0]
+    return product.get("image_front_url") or product.get("image_url")
+
+def add_item_to_space_list(space_id, user_id, item_name, expiration_date, amount, unit, image_url):
     conn = get_db_connection()
     if conn is None:
         return False, "Database connection failed.", None
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                INSERT INTO items (space_id, added_by_user_id, product_name, expiration_date, quantity, unit)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO items (space_id, added_by_user_id, product_name, expiration_date, quantity, unit, image_url)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 RETURNING item_id
-            """, (space_id, user_id, item_name, expiration_date, amount, unit))
+            """, (space_id, user_id, item_name, expiration_date, amount, unit, image_url))
             new_id = cur.fetchone()[0]
             conn.commit()
             return True, "Item added to space list.", new_id

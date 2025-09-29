@@ -6,7 +6,7 @@
     --fg-color: #000000;
     --light-text: #999999;
     --light-border: #e2e2e2;
-    --light-bg: #f8f8f8;
+    --light-bg: #f4f4f4;
     --lines: #cccccc;
 
     /* Light-Töne etwas kräftiger, aber immer noch sanft */
@@ -792,13 +792,24 @@ div, p, a{
 
 .tile:hover{
     filter: brightness(.95);
-    scale: 1.02;
+    /* scale: 1.02; */
 }
 
 .tile .tile-icon{
     display: flex;
     justify-content: center;
     align-items: center;
+    aspect-ratio: 1;
+    width: 50%;
+    border-radius: 1rem;
+    background-color: var(--light-bg);
+    overflow: hidden;
+}
+
+.tile-icon img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .tile .tile-icon span{
@@ -816,7 +827,41 @@ div, p, a{
 
 .tile .tile-info{
     font-size: 1.1rem;
-    opacity: 0.8;
+    opacity: 0.7;
+    margin-top: .5rem;
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 95%;
+}
+
+.tile .tile-info-tag{
+    transition: 100ms;
+    /* background: var(--violet-light); */
+    padding: .25rem .75rem;
+    border-radius: calc(1.25*var(--radius));
+    /* color: var(--violet); */
+    /* border: 2px solid var(--violet); */
+    font-weight: 700;
+}
+
+.tile .tile-info-tag:hover{
+    /* filter: brightness(1.1); */
+    scale: 0.97;
+}
+
+.tile-info-tag.important-tag{
+    background: var(--red-light);
+}
+
+.tile-info-tag.semi-important-tag{
+    background: var(--orange-light);
+}
+
+.tile-info-tag.unimportant-tag{
+    background: var(--lines);
 }
 
 /* modify amount overlay form */
