@@ -186,6 +186,32 @@ def view_space(space_id):
 
     return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
+@app.route("/profile")
+def profile():
+    if not check_logged_in():
+        return redirect('/login')
+    
+    user_id = session.get('user_id')
+    user_details = database.get_user_details(user_id)
+    user_spaces = database.get_user_spaces(user_id)
+    
+    # censor email enough to recognize it, but not show full email
+    if user_details and user_details.get('email'):
+        email = user_details['email']
+        parts = email.split('@')
+        if len(parts) == 2:
+            local = parts[0]
+            domain = parts[1]
+            if len(local) > 2:
+                local = local[0] + '*' * (len(local) - 2) + local[-1]
+            else:
+                local = local[0] + '*'
+            user_details['email'] = f"{local}@{domain}"
+        else:
+            user_details['email'] = '***'
+    
+    return render_template('profile.html', session=session, details=user_details, spaces=user_spaces)
+
 @app.route("/api/add-to-shopping-list", methods=['POST'])
 def add_to_shopping_list():
     if not check_logged_in():
@@ -440,4 +466,4 @@ def smart_add_shopping_list_route():
         return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=False, port=8080)

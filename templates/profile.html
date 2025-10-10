@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+    <div class="row">
+        <div class="child quick-actions">
+            <div class="quick-action" onclick="redirect('/logout')">
+                <div class="quick-action-icon">
+                    <span class="material-symbols-rounded">logout</span>
+                </div>
+                <div class="quick-action-name">Log out</div>
+            </div>
+            <div class="quick-action" onmousedown="redirect('/dashboard')">
+                <div class="quick-action-icon">
+                    <span class="material-symbols-rounded">dashboard</span>
+                </div>
+                <div class="quick-action-name" id="qa-join">Dashboard</div>
+            </div>
+        </div>
+
+        <div class="child space-overview">
+            <div class="space-name dashboard-child-title">
+                {{details.username}}
+            </div>
+            <div class="dashboard-child-subtitle">
+                This is your profile page. You can view your account information and the spaces you have joined. No actions are available at this time. More to come!
+            </div>
+            <div class="space-tags">
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">drafts</span>
+                    {{ details.email }}
+                </div>
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">calendar_clock</span>
+                    Joined {{ details.created_at }}
+                </div>
+                <div class="space-tag">
+                    <span class="material-symbols-rounded">id_card</span>
+                    User ID: {{ details.id }}
+                </div>
+                <!--<div class="space-tag">
+                    <span class="material-symbols-rounded">shopping_cart</span>
+                    {{ shopping_list | length }} item(s) on shopping list
+                </div>-->
+            </div>
+        </div>
+
+        <div class="child spaces">
+            <div class="dashboard-child-title">
+                Your Spaces
+            </div>
+            <div class="dashboard-child-subtitle">
+                Your joined/created shelfi spaces
+            </div>
+
+            <div class="spaces-list list-items">
+                {% for space in spaces %}
+                    <a class="space-card list-item-card" href="/space/{{space.id}}">
+                        <div class="space-icon-and-name list-item-main">
+                            <div class="space-card-icon list-item-icon">
+                                <span class="material-symbols-rounded">fork_spoon</span>
+                            </div>
+                            <div class="space-card-name list-item-name">{{space.name}}</div>
+                        </div>
+                        <div class="space-card-count list-item-info">{{space.members}} member(s)</div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

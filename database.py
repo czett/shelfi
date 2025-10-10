@@ -577,3 +577,34 @@ def smart_add_shopping_list(space_id, user_id, item_name):
             return False, str(e)
         finally:
             conn.close()
+            
+def get_user_details(user_id):
+    conn = get_db_connection()
+    if conn is None:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT user_id, username, email, created_at
+                FROM users
+                WHERE user_id = %s
+            """, (user_id,))
+            result = cur.fetchone()
+            if result:
+                created_at_date = result[3]
+                if isinstance(created_at_date, datetime):
+                    created_at_date = created_at_date.strftime("%b %d, %Y")
+                else:
+                    created_at_date = str(created_at_date)
+                return {
+                    'id': result[0],
+                    'username': result[1],
+                    'email': result[2],
+                    'created_at': created_at_date
+                }
+            return None
+    except Exception as e:
+        print("Error fetching user details:", e)
+        return None
+    finally:
+        conn.close()

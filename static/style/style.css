@@ -169,11 +169,11 @@ body {
     border: 2px solid var(--fg-color);
 }
 
-.navbar-right a:hover {
+/* .navbar-right a:hover {
     background-color: var(--bg-color);
     color: var(--fg-color);
     border-color: var(--fg-color);
-}
+} */
 
 /* content index */
 
@@ -590,6 +590,8 @@ body {
     padding: .75rem;
     border-radius: var(--radius-big);
     min-width: 15%;
+
+    backdrop-filter: blur(10px) saturate(1.25);
 }
 
 .auth-container h2{

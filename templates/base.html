@@ -27,7 +27,7 @@
         {% else %}
             <div class="navbar-right pc-only">
                 <div></div>
-                <div class="welcome-text">Welcome back, {{session.username}}!</div>
+                <a href="/profile" class="welcome-text">Welcome back, {{session.username}}!</a>
                 <!-- <a href="/logout">Logout</a> -->
             </div>
         {% endif %}

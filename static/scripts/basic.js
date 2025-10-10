@@ -472,3 +472,7 @@ document.getElementById("join-space-form").addEventListener("submit", function(e
         document.getElementById("qa-join").innerHTML = "Join Space";
     });
 });
+
+function redirect(url) {
+    window.location.href = url;
+}
