@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Onest:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Figtree:ital,wght@0,300..900;1,300..900&family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Kumbh+Sans:wght@100..900&family=Lexend:wght@100..900&display=swap');
 
 :root {
     --bg-color: #ffffff;
@@ -34,13 +35,14 @@
     /* spacing etc */
     --xpad: 4.5rem;
     --ypad: 1.5rem;
-    --radius: .75rem;
-    --radius-big: 1.5rem;
+    --radius: .5rem;
+    --radius-big: 1rem;
 }
 
 * {
     box-sizing: border-box;
-    font-family: 'Manrope';
+    /* font-family: 'Manrope'; */
+    font-family: 'Figtree';
     transition: 300ms;
     /* font-family: 'Onest'; */
 }
@@ -50,7 +52,7 @@ body, html{
 }
 
 div, p, a{
-    font-weight: 600;
+    font-weight: 500;
 }
 
 ::selection{
@@ -86,7 +88,7 @@ div, p, a{
 
 .navbar a.logo-text{
     font-size: 1.75rem;
-    font-weight: 900;
+    font-weight: 700;
 }
 
 .navbar-right {
@@ -99,7 +101,7 @@ div, p, a{
     display: flex;
     align-items: center;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     /* color: var(--light-text); */
 }
 
@@ -178,7 +180,7 @@ div, p, a{
 
 .quick-action:hover{
     scale: 1.02;
-    filter: brightness(0.95);
+    filter: brightness(0.98);
 }
 
 .quick-action .quick-action-icon{
@@ -368,7 +370,7 @@ div, p, a{
 }
 
 .list-item-card:hover{
-    filter: brightness(0.95);
+    filter: brightness(0.98);
 }
 
 .child .list-item-icon{
@@ -390,7 +392,7 @@ div, p, a{
 
 .list-item-main div{
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .list-item-info{
@@ -471,7 +473,7 @@ div, p, a{
     background-color: var(--light-bg);
     border-radius: calc(0.75*var(--radius));
     outline: none;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .list-form form button, button{
@@ -733,6 +735,7 @@ div, p, a{
     background: linear-gradient(45deg, var(--blue), var(--yellow), var(--violet));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-size: 1.9rem;
     font-weight: 700;
 }
@@ -788,10 +791,11 @@ div, p, a{
     position: relative;
     width: 100%;
     height: 100%;
+    gap: .15rem;
 }
 
 .tile:hover{
-    filter: brightness(.95);
+    filter: brightness(.98);
     /* scale: 1.02; */
 }
 
