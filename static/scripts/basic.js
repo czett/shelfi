@@ -332,13 +332,12 @@ function updateItemTileDOM(item) {
 function shoppingListButton(){
     let shoppingList = document.querySelector('#shopping-list');
 
+    // if shopping list is null, highlight spaces list and return
     if (shoppingList == null){
-        console.log('no shopping list found');
         focusSpacesList();
         return;
-    }else{
-        console.log('scrolling to shopping list');
     }
+
     return;
 }
 
