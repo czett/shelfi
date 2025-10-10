@@ -61,6 +61,7 @@
     font-family: 'Figtree';
     transition: 300ms;
     /* font-family: 'Onest'; */
+    scroll-behavior: smooth;
 }
 
 body, html{
@@ -80,6 +81,10 @@ div, p, a{
     display: none;
 }
 
+.mobile-only{
+    display: none;
+}
+
 body {
     /* Basis ist Ihr reines Weiß */
     background-color: var(--bg-color); 
@@ -96,7 +101,7 @@ body {
             
         /* 2. Sekundärakzent: Ein kleinerer, subtilerer Akzent oben-Mitte mit Hell-Indigo */
         radial-gradient(circle at 70% 20%, 
-            var(--indigo-light) 0px, /* **WICHTIG: light-Version für helle UI** */
+            var(--blue-light) 0px, /* **WICHTIG: light-Version für helle UI** */
             transparent 50%);
     
     /* Dunkle Textfarbe für Lesbarkeit */
@@ -390,7 +395,7 @@ body {
 /* spaces list, similar to messages */
 
 .focus{
-    filter: brightness(1.1) saturate(1.2);
+    filter: brightness(0.75) saturate(1.2);
 }
 
 .child .list-items{
@@ -1015,8 +1020,8 @@ body {
 
 @media screen and (width < 900px) {
     :root{
-        --xpad: .75rem;
-        --ypad: .75rem;
+        --xpad: 1rem;
+        --ypad: 1rem;
     }
 
     .add-list-item-button{
@@ -1066,5 +1071,53 @@ body {
 
     .smart-add-info-text{
         display: none;
+    }
+
+    /* bottom fixed nav restyling */
+    .navbar{
+        inset: auto 0 0 0;
+        border-radius: calc(2 * var(--radius-big)) calc(2 * var(--radius-big)) 0 0;
+        height: 12dvh;
+        backdrop-filter: blur(15px);
+    }
+
+    .mobile-only{
+        display: block;
+    }
+
+    .content{
+        margin-top: var(--ypad);
+    }
+
+    .navbar .pc-only{
+        display: none;
+    }
+
+    .navbar .nav-icons{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .nav-icons .nav-icon{
+        aspect-ratio: 1;
+        width: 18%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-icons .nav-icon span{
+        font-size: 2.25rem;
+        color: var(--fg-color);
+    }
+
+    .nav-icon.main-nav-icon{
+        border-radius: 50%;
+        background-color: var(--fg-color);
+    }
+
+    .nav-icon.main-nav-icon span{
+        color: var(--text-color-bright);
     }
 }

@@ -329,6 +329,19 @@ function updateItemTileDOM(item) {
     }*/
 }
 
+function shoppingListButton(){
+    let shoppingList = document.querySelector('#shopping-list');
+
+    if (shoppingList == null){
+        console.log('no shopping list found');
+        focusSpacesList();
+        return;
+    }else{
+        console.log('scrolling to shopping list');
+    }
+    return;
+}
+
 function focusSpacesList(){
     // highlight spaces list, .spaces-list for 1s, then remove class
     document.querySelector('.spaces').classList.add('focus');
