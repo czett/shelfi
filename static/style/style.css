@@ -1082,9 +1082,9 @@ body {
 
     /* bottom fixed nav restyling */
     .navbar{
-        inset: auto 0 0 0;
+        inset: auto 0 0px 0;
         border-radius: calc(2 * var(--radius-big)) calc(2 * var(--radius-big)) 0 0;
-        height: 12dvh;
+        height: 12vh;
         backdrop-filter: blur(15px);
     }
 
