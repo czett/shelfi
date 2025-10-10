@@ -17,20 +17,40 @@
 
     {% block nav %}
     <div class="navbar">
-        <a href="/" class="logo-text">shelfi.top</a>
+        <a href="/" class="logo-text pc-only">shelfi.top</a>
 
         {% if not session.logged_in %}
-            <div class="navbar-right">
+            <div class="navbar-right pc-only">
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
             </div>
         {% else %}
-            <div class="navbar-right">
+            <div class="navbar-right pc-only">
                 <div></div>
-                <div class="welcome-text">Welcome back, {{session.username}}!</div>
+                <a href="/profile" class="welcome-text">Welcome back, {{session.username}}!</a>
                 <!-- <a href="/logout">Logout</a> -->
             </div>
         {% endif %}
+
+        <!-- mobile-nav-contents -->
+
+        <div class="mobile-only nav-icons">
+            <a href="/" class="nav-icon">
+                <span class="material-symbols-rounded">home</span>
+            </a>
+            <a href="/dashboard" class="nav-icon">
+                <span class="material-symbols-rounded">dashboard</span>
+            </a>
+            <a href="#shopping-list" class="nav-icon main-nav-icon" onclick="shoppingListButton();">
+                <span class="material-symbols-rounded">shopping_bag_speed</span>
+            </a>
+            <a href="#" class="nav-icon disabled-icon">
+                <span class="material-symbols-rounded">chef_hat</span>
+            </a>
+            <a href="/profile" class="nav-icon">
+                <span class="material-symbols-rounded">person</span>
+            </a>
+        </div>
     </div>
     {% endblock %}
 </body>

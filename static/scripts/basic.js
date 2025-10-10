@@ -342,6 +342,18 @@ function updateItemTileDOM(item) {
     }*/
 }
 
+function shoppingListButton(){
+    let shoppingList = document.querySelector('#shopping-list');
+
+    // if shopping list is null, highlight spaces list and return
+    if (shoppingList == null){
+        focusSpacesList();
+        return;
+    }
+
+    return;
+}
+
 function focusSpacesList(){
     // highlight spaces list, .spaces-list for 1s, then remove class
     document.querySelector('.spaces').classList.add('focus');
@@ -473,3 +485,7 @@ document.getElementById("join-space-form").addEventListener("submit", function(e
         document.getElementById("qa-join").innerHTML = "Join Space";
     });
 });
+
+function redirect(url) {
+    window.location.href = url;
+}
