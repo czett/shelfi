@@ -3,34 +3,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Figtree:ital,wght@0,300..900;1,300..900&family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Kumbh+Sans:wght@100..900&family=Lexend:wght@100..900&display=swap');
 
 :root {
-    --bg-color: #ffffff;
+    /* --bg-color: #ffffff; */
+    --bg-color: rgba(255, 255, 255, 0.5); /* Reines Weiß mit leichter Transparenz für Tiefe */
     --fg-color: #000000;
+    --text-color-bright: #ffffff;
     --light-text: #999999;
     --light-border: #e2e2e2;
-    --light-bg: #f4f4f4;
+    --light-bg: rgba(220, 220, 220, 0.5);
     --lines: #cccccc;
 
-    /* Light-Töne etwas kräftiger, aber immer noch sanft */
+    /* colors! */
     --red: #c62828;
-    --red-light: #ffcdd2; /* Etwas satter als die vorherige Version */
+    --red-light: #ffb3b8;    
+    --red-rgba: rgba(198, 40, 40, 0.5);
+    --red-light-rgba: rgba(255, 179, 184, 0.5);
 
     --orange: #e65100;
-    --orange-light: #ffecb3; /* Satter, aber hell */
+    --orange-light: #ffe599; 
+    --orange-rgba: rgba(230, 81, 0, 0.5);
+    --orange-light-rgba: rgba(255, 229, 153, 0.5);
 
     --yellow: #f9a825;
-    --yellow-light: #fff9c4; /* Sichtbarer Gelbton */
+    --yellow-light: #fff59d; 
+    --yellow-rgba: rgba(249, 168, 37, 0.5);
+    --yellow-light-rgba: rgba(255, 245, 157, 0.5);
 
     --green: #2e7d32;
-    --green-light: #c8e6c9; /* Sanftes Pastellgrün */
+    --green-light: #b2dfb3;  
+    --green-rgba: rgba(46, 125, 50, 0.5);
+    --green-light-rgba: rgba(178, 223, 179, 0.5);
 
     --blue: #1565c0;
-    --blue-light: #bbdefb; /* Erkennbares Hellblau */
+    --blue-light: #90caf9;   
+    --blue-rgba: rgba(21, 101, 192, 0.5);
+    --blue-light-rgba: rgba(144, 202, 249, 0.5);
 
     --indigo: #3949ab;
-    --indigo-light: #c5cae9; /* Dezentes Hellindigo */
+    --indigo-light: #9fa8da; 
+    --indigo-rgba: rgba(57, 73, 171, 0.5);
+    --indigo-light-rgba: rgba(159, 168, 218, 0.5);
 
     --violet: #8e24aa;
-    --violet-light: #e1bee7; /* Zartes Lila */
+    --violet-light: #d1a3d7; 
+    --violet-rgba: rgba(142, 36, 170, 0.5);
+    --violet-light-rgba: rgba(209, 163, 215, 0.5);
     
     /* spacing etc */
     --xpad: 4.5rem;
@@ -57,13 +73,35 @@ div, p, a{
 
 ::selection{
     background: var(--fg-color);
-    color: var(--bg-color);
+    color: var(--text-color-bright);
 }
 
 ::-webkit-scrollbar{
     display: none;
 }
 
+body {
+    /* Basis ist Ihr reines Weiß */
+    background-color: var(--bg-color); 
+    
+    /* Schlüssel für den 3D-Effekt: Hintergrund scrollt NICHT */
+    background-attachment: fixed; 
+    
+    /* Subtiler radialer Verlauf für Tiefe und Akzent */
+    background-image: 
+        /* 1. Hauptakzent: Startet unten links (bottom left) mit Hellblau */
+        radial-gradient(circle at bottom left, 
+            var(--violet-light) 0px, 
+            transparent 60%),
+            
+        /* 2. Sekundärakzent: Ein kleinerer, subtilerer Akzent oben-Mitte mit Hell-Indigo */
+        radial-gradient(circle at 70% 20%, 
+            var(--indigo-light) 0px, /* **WICHTIG: light-Version für helle UI** */
+            transparent 50%);
+    
+    /* Dunkle Textfarbe für Lesbarkeit */
+    color: var(--fg-color); 
+}
 /* navbar */
 
 .navbar {
@@ -78,7 +116,12 @@ div, p, a{
     width: 100%;
     height: 10dvh;
     padding: 0 var(--xpad);
-    background-color: var(--bg-color);
+    /* background-color: var(--bg-color); */
+
+    /* liquid glass-ish, once again */
+    background-color: rgba(240, 240, 240, .4);
+    backdrop-filter: blur(10px) saturate(2);
+    border-radius: 0 0 calc(2 * var(--radius-big)) calc(2 * var(--radius-big));
 }
 
 .navbar a {
@@ -108,7 +151,7 @@ div, p, a{
 .navbar-right a {
     text-align: center;
     background-color: var(--fg-color);
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     padding: .75ch 1.5ch;
     border-radius: var(--radius);
     cursor: pointer;
@@ -126,7 +169,7 @@ div, p, a{
 
 .content{
     padding: 0 var(--xpad);
-    margin-top: 10dvh;
+    margin-top: calc(var(--ypad) + 10dvh); /* nav height, 10vh plus --ypad */
     max-width: 100%;
     overflow-x: hidden;
     margin-bottom: 5dvh;
@@ -147,15 +190,20 @@ div, p, a{
     display: flex;
     gap: var(--ypad);
     overflow: hidden;
+    background-color: transparent;
     /* background-color: var(--orange); */
 }
 
 .dashboard .row .child{
     padding: var(--ypad);
     border-radius: var(--radius-big);
-    background-color: var(--light-bg);
+    /* background-color: var(--light-bg); */
     transition: 300ms;
     position: relative !important;
+
+    /* liquid glass-ish design */
+    background: rgba( 255, 255, 255, 0.45 );
+    backdrop-filter: blur(10px);
 }
 
 .dashboard .row .child.quick-actions{
@@ -180,7 +228,7 @@ div, p, a{
 
 .quick-action:hover{
     scale: 1.02;
-    filter: brightness(0.98);
+    /* filter: brightness(.97); */
 }
 
 .quick-action .quick-action-icon{
@@ -248,7 +296,8 @@ div, p, a{
 .overview .message{
     width: 100%;
     border-radius: var(--radius);
-    background-color: var(--blue-light);
+    background-color: var(--blue-light-rgba);
+    backdrop-filter: blur(5px) saturate(1.5);
     padding: 1rem;
     display: flex;
     justify-content: start;
@@ -289,11 +338,11 @@ div, p, a{
 }
 
 .overview .message.warning{
-    background-color: var(--orange-light);
+    background-color: var(--orange-light-rgba);
 }
 
 .overview .message.alert{
-    background-color: var(--red-light);
+    background-color: var(--red-light-rgba);
 }
 
 .overview .message.warning .message-icon{
@@ -341,7 +390,7 @@ div, p, a{
 /* spaces list, similar to messages */
 
 .focus{
-    filter: brightness(0.9) saturate(1.2);
+    filter: brightness(1.1) saturate(1.2);
 }
 
 .child .list-items{
@@ -370,7 +419,7 @@ div, p, a{
 }
 
 .list-item-card:hover{
-    filter: brightness(0.98);
+    filter: brightness(.97);
 }
 
 .child .list-item-icon{
@@ -399,6 +448,11 @@ div, p, a{
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 600;
+}
+
+.smart-add-info-text{
+    font-weight: 600;
 }
 
 /* create space floating button */
@@ -411,7 +465,7 @@ div, p, a{
     display: flex;
     justify-content: start;
     align-items: center;
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     padding: .5rem .75rem;
     gap: .5rem;
     cursor: pointer;
@@ -480,7 +534,7 @@ div, p, a{
     flex: 1;
     padding: 1ch 1.5ch;
     font-size: 1rem;
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     border: none;
     background-color: var(--fg-color);
     border-radius: calc(0.75*var(--radius));
@@ -617,7 +671,7 @@ div, p, a{
     padding: 1ch 1.5ch;
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     background-color: var(--fg-color);
     border: none;
     border-radius: var(--radius);
@@ -652,14 +706,14 @@ div, p, a{
     font-weight: 700;
     padding: 1ch;
     background-color: var(--fg-color);
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     border-radius: var(--radius);
     width: fit-content;
 }
 
 .space-overview a.btn{
     text-decoration: none;
-    color: var(--bg-color);
+    color: var(--text-color-bright);
     background-color: var(--red);
     width: calc(100% - 2* var(--ypad));
     display: block;
@@ -673,7 +727,7 @@ div, p, a{
 }
 
 .space-overview a.btn:hover{
-    filter: brightness(1.1);
+    filter: brightness(.97);
 }
 
 .overview .message a.copy-btn{
@@ -795,7 +849,7 @@ div, p, a{
 }
 
 .tile:hover{
-    filter: brightness(.98);
+    filter: brightness(0.97);
     /* scale: 1.02; */
 }
 
