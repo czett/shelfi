@@ -300,7 +300,7 @@ def get_product_image_url(query: str) -> str | None:
         "search_simple": 1,
         "action": "process",
         "json": 1,
-        "page_size": 1  # first result
+        "page_size": 1  # first/best result only
     }
     r = requests.get(url, params=params, timeout=10)
     r.raise_for_status()
@@ -311,6 +311,17 @@ def get_product_image_url(query: str) -> str | None:
         return None
 
     product = products[0]
+
+    # 1. prefers studio-like 'selected' images
+    selected = product.get("selected_images", {})
+    front = selected.get("front", {})
+    display = front.get("display", {})
+
+    for lang in ["en", "de", "fr"]:
+        if url := display.get(lang):
+            return url
+
+    # 2. fallback to normal front image
     return product.get("image_front_url") or product.get("image_url")
 
 def add_item_to_space_list(space_id, user_id, item_name, expiration_date, amount, unit, image_url):
