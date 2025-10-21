@@ -1,1 +1,104 @@
 {% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="dashboard">
+    <div class="row">
+        <div class="child quick-actions">
+            {% if not session.logged_in %}
+                <div class="quick-action" onmousedown="redirect('/login')">
+                    <div class="quick-action-icon">
+                        <span class="material-symbols-rounded">login</span>
+                    </div>
+                    <div class="quick-action-name" id="qa-join">Login</div>
+                </div>
+                <div class="quick-action" onmousedown="redirect('/register')">
+                    <div class="quick-action-icon">
+                        <span class="material-symbols-rounded">how_to_reg</span>
+                    </div>
+                    <div class="quick-action-name">Register</div>
+                </div>
+            {% endif %}
+            <div class="quick-action" onclick="redirect('/dashboard')">
+                <div class="quick-action-icon">
+                    <span class="material-symbols-rounded">dashboard</span>
+                </div>
+                <div class="quick-action-name">Dashboard</div>
+            </div>
+            <div class="quick-action" onclick="redirect('/logout')">
+                <div class="quick-action-icon">
+                    <span class="material-symbols-rounded">logout</span>
+                </div>
+                <div class="quick-action-name">Log out</div>
+            </div>
+        </div>
+        
+        <div class="child app-overview">
+            <div class="dashboard-child-title">
+                What is shelfi?
+            </div>
+            <div class="dashboard-child-subtitle">
+                A brief overview of the application
+            </div>
+
+            <div class="simple-list">
+                <div class="simple-list-item">
+                    <div class="simple-list-item-header">
+                        Overview
+                    </div>
+                    <div class="simple-list-item-content">
+                        shelfi is a collaborative pantry and recipe management application that helps households and groups manage food inventory and meal planning.
+                    </div>
+                </div>
+
+                <div class="simple-list-item">
+                    <div class="simple-list-item-header">
+                        Core features
+                    </div>
+                    <div class="simple-list-item-content">
+                        - Create and join shared spaces for collaborative management<br>
+                        - Add, track, and organize pantry items with real-time updates<br>
+                        - Share recipes and receive suggestions based on available ingredients (coming soon)
+                    </div>
+                </div>
+
+                <div class="simple-list-item">
+                    <div class="simple-list-item-header">
+                        Benefits
+                    </div>
+                    <div class="simple-list-item-content">
+                        - Reduce food waste<br>
+                        - Streamline grocery shopping<br>
+                        - Enhance meal preparation with ingredient-based suggestions (coming soon)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="child versions-overview">
+            <div class="dashboard-child-title">
+                Versions and Updates
+            </div>
+            <div class="dashboard-child-subtitle">
+                Overview of recent changes made to shelfi
+            </div>
+
+            <div class="versions-list simple-list">
+                <div class="version-list-item simple-list-item">
+                    <div class="version-date simple-list-item-header">
+                        October 21st, 2025
+                    </div>
+
+                    <div class="version-changes simple-list-item-content">
+                        - Enhanced mobile UX <br>
+                        - Added landing page <br>
+                        - Changed color scheme to be less distracting
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
