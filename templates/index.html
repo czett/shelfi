@@ -20,24 +20,17 @@
                     <div class="quick-action-name">Register</div>
                 </div>
             {% endif %}
-            <div class="quick-action" onmousedown="expandListForm('join-space-form')">
+            <div class="quick-action" onclick="redirect('/dashboard')">
                 <div class="quick-action-icon">
-                    <span class="material-symbols-rounded">door_open</span>
+                    <span class="material-symbols-rounded">dashboard</span>
                 </div>
-                <div class="quick-action-name" id="qa-join">Join Space</div>
+                <div class="quick-action-name">Dashboard</div>
             </div>
             <div class="quick-action" onclick="redirect('/logout')">
                 <div class="quick-action-icon">
                     <span class="material-symbols-rounded">logout</span>
                 </div>
                 <div class="quick-action-name">Log out</div>
-            </div>
-
-            <div class="join-space-form list-form" data-expanded="false">
-                <form id="join-space-form">
-                    <input type="text" id="invitation_code" name="invitation_code" required placeholder="Invitation Code">
-                    <button type="submit">Join</button>
-                </form>
             </div>
         </div>
         
@@ -66,7 +59,7 @@
                     <div class="simple-list-item-content">
                         - Create and join shared spaces for collaborative management<br>
                         - Add, track, and organize pantry items with real-time updates<br>
-                        - Share recipes and receive suggestions based on available ingredients
+                        - Share recipes and receive suggestions based on available ingredients (coming soon)
                     </div>
                 </div>
 
@@ -77,7 +70,7 @@
                     <div class="simple-list-item-content">
                         - Reduce food waste<br>
                         - Streamline grocery shopping<br>
-                        - Enhance meal preparation with ingredient-based suggestions
+                        - Enhance meal preparation with ingredient-based suggestions (coming soon)
                     </div>
                 </div>
             </div>
@@ -98,21 +91,9 @@
                     </div>
 
                     <div class="version-changes simple-list-item-content">
-                        - Added new recipe sharing feature<br>
-                        - Improved mobile navigation experience<br>
-                        - Fixed bugs related to item expiration notifications
-                    </div>
-                </div>
-                
-                <div class="version-list-item simple-list-item">
-                    <div class="version-date simple-list-item-header">
-                        October 21st, 2025
-                    </div>
-
-                    <div class="version-changes simple-list-item-content">
-                        - Added new recipe sharing feature<br>
-                        - Improved mobile navigation experience<br>
-                        - Fixed bugs related to item expiration notifications
+                        - Enhanced mobile UX <br>
+                        - Added landing page <br>
+                        - Changed color scheme to be less distracting
                     </div>
                 </div>
             </div>
