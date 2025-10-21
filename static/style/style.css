@@ -102,12 +102,12 @@ body {
     background-image: 
         /* 1. Hauptakzent: Startet unten links (bottom left) mit Hellblau */
         radial-gradient(circle at bottom left, 
-            var(--violet-light) 0px, 
+            var(--light-border) 0px, 
             transparent 60%),
             
         /* 2. Sekundärakzent: Ein kleinerer, subtilerer Akzent oben-Mitte mit Hell-Indigo */
         radial-gradient(circle at 70% 20%, 
-            var(--blue-light) 0px, /* **WICHTIG: light-Version für helle UI** */
+            var(--lines) 0px, /* **WICHTIG: light-Version für helle UI** */
             transparent 50%);
     
     /* Dunkle Textfarbe für Lesbarkeit */
