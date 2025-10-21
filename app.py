@@ -20,13 +20,14 @@ def make_session_permanent():
 
 @app.route('/')
 def index():
+    return render_template('index.html', session=session)
+    
     if check_logged_in():
         return redirect('/dashboard')
     
     # redirect to auth page if not logged in, as there is no landing page planned. this is NOT SaaS
     return redirect('/login')
     
-    return render_template('index.html', session=session)
 
 @app.route('/login')
 def login():

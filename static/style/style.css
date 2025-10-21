@@ -995,6 +995,13 @@ body {
     font-style: 1.1rem;
 }
 
+/* app overview widget */
+
+.child.app-overview{
+    min-width: 20%;
+    max-width: 25%;
+}
+
 /* responsive design */
 
 @media screen and (width < 2000px) {
