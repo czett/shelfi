@@ -4,7 +4,7 @@
 ### Welcome to shelfi, your new digital refrigerator app for easy inventory management, smart shopping lists, and less food waste!
 
 ## 💡 What is shelfi?
-shelfi is a web app that helps you keep track of your groceries. Designed for use in student dorms, it allows you to manage single and shared kitchens, scan and share items, and find recipes based on your current inventory.
+shelfi is a web app that helps you keep track of your groceries. Designed for use in student dorms, it allows you to manage single and shared kitchens, scan (soon) and share items, and find recipes based on your current inventory (soon).
 
 ## 🚀 Features
 - Shopping List: Yes, a basic but essential feature.
@@ -16,9 +16,10 @@ shelfi is a web app that helps you keep track of your groceries. Designed for us
 ## 🚧 Planned / soon-to-be:
 - Quick inventory tracking: Scan barcodes or receipts to quickly add food items.
 - Recipes: Find recipes based on your current inventory.
+- Snap-Capture: Snap a photo and let shelfi do the work of updating and managing your items (maybe soon?).
 
 ## 📝 Tech Stack
-- Frontend: Vanilla
 - Backend: Python Flask
+- Frontend: Vanilla
 - Database: PostgreSQL on neon
 - APIs: Open Food Facts (soon, for product data)
