@@ -13,6 +13,7 @@
     --light-border: #e2e2e2;
     --light-bg: rgba(220, 220, 220, 0.5);
     --lines: #cccccc;
+    --lines-dark: #999999;
 
     /* colors! */
     --red: #c62828;
@@ -527,6 +528,11 @@ body {
     position: absolute;
     inset: auto 50% 0% auto;
     background-color: var(--light-border);
+
+    /* liquid glass-ish, once again */
+    background-color: var(--light-bg);
+    backdrop-filter: blur(20px) brightness(0.9);
+
     min-width: 60%;
     width: fit-content;
     overflow: hidden;
@@ -561,7 +567,7 @@ body {
     flex: 3;
     padding: 1ch 1.5ch;
     font-size: 1rem;
-    border: 2px solid var(--lines);
+    border: 2px solid var(--lines-dark);
     background-color: var(--light-bg);
     border-radius: calc(0.75*var(--radius));
     outline: none;
@@ -573,7 +579,7 @@ body {
     padding: 1ch 1.5ch;
     font-size: 1rem;
     color: var(--text-color-bright);
-    border: none;
+    border: 2px solid var(--fg-color);
     background-color: var(--fg-color);
     border-radius: calc(0.75*var(--radius));
     outline: none;

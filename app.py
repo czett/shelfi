@@ -185,7 +185,7 @@ def view_space(space_id):
             except Exception:
                 pass
 
-    # measurements for item quantitiy modification
+    # measurements for new item additions
     measurements = [
         # weight
         "kg", "g", "lb", "oz",
