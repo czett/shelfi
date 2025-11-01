@@ -185,7 +185,19 @@ def view_space(space_id):
             except Exception:
                 pass
 
-    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
+    # measurements for item quantitiy modification
+    measurements = [
+        # weight
+        "kg", "g", "lb", "oz",
+        # volume
+        "ml", "l", "cups", "pint",
+        # packaging
+        "can", "bottle", "box", "jar", "bag",
+        # other
+        "pcs"
+    ]
+
+    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, measurements=measurements, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
 @app.route("/profile")
 def profile():
@@ -467,4 +479,4 @@ def smart_add_shopping_list_route():
         return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8080)
+    app.run(debug=True, port=8080)

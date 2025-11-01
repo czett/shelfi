@@ -198,19 +198,23 @@
                     <div class="number-and-option-picker">
                     <input type="number" id="amount" required placeholder="Amount">
                     <select id="unit" required>
-                        <option value="Unit" disabled selected>Unit</option>
-                        <!-- weight -->
+                        <!--<option value="Unit" disabled selected>Unit</option>
+
                         <option value="kg">kg</option>
                         <option value="g">g</option>
-                        <!-- volume -->
+
                         <option value="ml">ml</option>
                         <option value="l">l</option>
                         <option value="pcs">pcs</option>
                         <option value="cups">cups</option>
-                        <!-- packaging -->
+
                         <option value="can">can</option>
                         <option value="bottle">bottle</option>
-                        <option value="box">box</option>
+                        <option value="box">box</option>-->
+
+                        {% for measurement in measurements %}
+                            <option value="{{measurement}}">{{measurement}}</option>
+                        {% endfor %}
                     </select>
                     </div>
 
