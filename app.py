@@ -481,4 +481,4 @@ def smart_add_shopping_list_route():
         return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=False, port=8080)
