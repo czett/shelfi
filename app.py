@@ -185,7 +185,19 @@ def view_space(space_id):
             except Exception:
                 pass
 
-    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
+    # measurements for new item additions
+    measurements = [
+        # weight
+        "kg", "g", "lb", "oz",
+        # volume
+        "ml", "l", "cups", "pint",
+        # packaging
+        "can", "bottle", "box", "jar", "bag",
+        # other
+        "pcs"
+    ]
+
+    return render_template('space.html', session=session, space=space, items=items, shopping_list=shopping_list, measurements=measurements, num_expired=num_expired, num_expiring_soon=num_expiring_soon)
 
 @app.route("/profile")
 def profile():
@@ -220,7 +232,9 @@ def add_to_shopping_list():
     
     item_name = request.form.get('item_name')
     if item_name:
-        item_name = item_name.capitalize()
+        #item_name = item_name.capitalize()
+        new_item_name = item_name[0].upper() + item_name[1:]
+        item_name = new_item_name
         
     space_id = session.get('current_space_id')
     user_id = session.get('user_id')
@@ -369,7 +383,7 @@ def add_item_to_shopping_list():
         return jsonify({"success": False, "message": "You are not logged in."}), 401
     
     data = request.get_json()
-    item_name = data.get("item_name", "").strip().capitalize()
+    item_name = data.get("item_name", "").strip()
     space_id = session.get("current_space_id")
     user_id = session.get("user_id")
 
