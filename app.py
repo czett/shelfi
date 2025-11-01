@@ -232,7 +232,9 @@ def add_to_shopping_list():
     
     item_name = request.form.get('item_name')
     if item_name:
-        item_name = item_name.capitalize()
+        #item_name = item_name.capitalize()
+        new_item_name = item_name[0].upper() + item_name[1:]
+        item_name = new_item_name
         
     space_id = session.get('current_space_id')
     user_id = session.get('user_id')
@@ -381,7 +383,7 @@ def add_item_to_shopping_list():
         return jsonify({"success": False, "message": "You are not logged in."}), 401
     
     data = request.get_json()
-    item_name = data.get("item_name", "").strip().capitalize()
+    item_name = data.get("item_name", "").strip()
     space_id = session.get("current_space_id")
     user_id = session.get("user_id")
 
